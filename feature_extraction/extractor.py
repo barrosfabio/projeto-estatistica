@@ -1,7 +1,8 @@
 import numpy as np
 import os
-from feature_extraction.utils.feature_extraction_utils import *
+from feature_extraction.feature_extraction_utils.feature_extraction_utils import *
 from feature_extraction.lbp.lbp import LocalBinaryPatterns
+import pandas as pd
 
 UNIFORM_FEATURE_NUMBER = 10
 NRI_UNIFORM_FEATURE_NUMBER = 59
