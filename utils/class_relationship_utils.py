@@ -2,6 +2,7 @@ import numpy as np
 
 CLASS_SEPARATOR = '/'
 
+
 def find_parent(possible_class):
     if len(possible_class) > 1:
 
@@ -25,27 +26,3 @@ def compare_child_length(possible_class, comparison):
         return False
 
 
-def find_immediate_child(possible_class, combinations):
-    combinations = list(combinations)
-    immediate_child = {value for value in combinations if value.find(possible_class + CLASS_SEPARATOR) != -1 and compare_child_length(possible_class, value)}
-
-    return list(immediate_child)
-
-
-def find_sibling_classes(combinations, data_class, parent):
-    # Classes at the same level
-    same_level_classes = {value for value in combinations if
-                          len(value.split(CLASS_SEPARATOR)) == len(data_class.split(CLASS_SEPARATOR))}
-
-    # Classes at the same level and that share the same parent
-    siblings = {value for value in same_level_classes if
-                find_parent(value) == parent}
-
-    return list(siblings)
-
-
-def find_sibling_child(combinations, sibling):
-    # Tries to find child classes for each sibling. Tests if the value is equal to sibling class + /
-    child_classes = {value for value in combinations if value.find(sibling + CLASS_SEPARATOR) != -1}
-
-    return list(child_classes)

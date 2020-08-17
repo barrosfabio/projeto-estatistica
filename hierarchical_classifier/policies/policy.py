@@ -1,6 +1,10 @@
-from utils.class_relationship_utils import find_immediate_child
+from utils.class_relationship_utils import compare_child_length
+import numpy as np
 
-class Policy():
+CLASS_SEPARATOR = '/'
+
+
+class Policy:
 
     def __init__(self, current_class, parent_class):
         self.current_class = current_class
@@ -9,6 +13,9 @@ class Policy():
         self.negative_classes = []
         self.direct_child_classes = []
 
-
     def find_direct_child(self, combinations):
-        self.direct_child_classes = find_immediate_child(self.current_class, combinations)
+        combinations = list(combinations)
+        immediate_child = {value for value in combinations if
+                           value.find(self.current_class + CLASS_SEPARATOR) != -1 and compare_child_length(self.current_class,
+                                                                                                       value)}
+        self.direct_child_classes = np.array(list(immediate_child))

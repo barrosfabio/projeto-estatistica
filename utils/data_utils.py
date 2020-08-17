@@ -14,10 +14,7 @@ def load_csv_data(path):
     # Gathering the unique classes
     unique_classes = np.unique(classes)
 
-    # Slicing in Input and Output data
-    [input_data, output_data] = slice_data(data_frame)
-
-    return [input_data, output_data, unique_classes]
+    return [data_frame, unique_classes]
 
 
 def count_per_class(output_data):
