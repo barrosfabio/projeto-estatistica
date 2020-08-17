@@ -5,6 +5,7 @@ import seaborn as sns
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
+
 def load_csv_data(path):
     # Loading the CSV Data
     data_frame = pd.read_csv(path)

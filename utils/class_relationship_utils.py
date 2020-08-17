@@ -1,45 +1,51 @@
+import numpy as np
 
-def split_compare(possible_class, comparison, separator):
+CLASS_SEPARATOR = '/'
 
-    possible_class_splitted = possible_class.split(separator)
-    comparison_list = comparison.split(separator)
+def find_parent(possible_class):
+    if len(possible_class) > 1:
 
-    if len(comparison_list) == (len(possible_class_splitted)+1):
+        possible_class_splitted = possible_class.split(CLASS_SEPARATOR)
+        possible_class_splitted = possible_class_splitted[0:-1]
+        parent = CLASS_SEPARATOR.join(possible_class_splitted)
+
+    # Parent is the root of the tree
+    else:
+        parent = 'R'
+    return parent
+
+
+def compare_child_length(possible_class, comparison):
+    possible_class_splitted = possible_class.split(CLASS_SEPARATOR)
+    comparison_list = comparison.split(CLASS_SEPARATOR)
+
+    if len(comparison_list) == (len(possible_class_splitted) + 1):
         return True
     else:
         return False
 
 
-def identify_immediate_child(possible_class, combinations):
-    child = []
+def find_immediate_child(possible_class, combinations):
     combinations = list(combinations)
+    immediate_child = {value for value in combinations if value.find(possible_class + CLASS_SEPARATOR) != -1 and compare_child_length(possible_class, value)}
 
-    if '.' in combinations[1]:
-        separator = '.'
-    elif '/' in combinations[1]:
-        separator = '/'
-
-    for i in range(len(combinations)):
-        comparison = str(combinations[i])
-        if(comparison.find(possible_class + separator) != -1 and split_compare(possible_class, comparison, separator)):
-            child.append(combinations[i])
-
-    return child
+    return list(immediate_child)
 
 
-def identify_parent(possible_class):
-    if(len(possible_class)>1):
-        if '.' in possible_class:
-            separator = '.'
-        elif '/' in possible_class:
-            separator = '/'
+def find_sibling_classes(combinations, data_class, parent):
+    # Classes at the same level
+    same_level_classes = {value for value in combinations if
+                          len(value.split(CLASS_SEPARATOR)) == len(data_class.split(CLASS_SEPARATOR))}
 
-        possible_class_splitted = possible_class.split(separator)
+    # Classes at the same level and that share the same parent
+    siblings = {value for value in same_level_classes if
+                find_parent(value) == parent}
 
-        possible_class_splitted = possible_class_splitted[0:-1]
+    return list(siblings)
 
-        parent = separator.join(possible_class_splitted)
-    # Parent is the root of the tree
-    else:
-        parent = 'R'
-    return parent
+
+def find_sibling_child(combinations, sibling):
+    # Tries to find child classes for each sibling. Tests if the value is equal to sibling class + /
+    child_classes = {value for value in combinations if value.find(sibling + CLASS_SEPARATOR) != -1}
+
+    return list(child_classes)
