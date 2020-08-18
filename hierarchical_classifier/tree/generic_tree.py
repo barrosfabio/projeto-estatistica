@@ -72,3 +72,5 @@ class Tree():
             root = self.insert_node(root, parent, data_classes_relationship, current_node)
 
         return root
+
+

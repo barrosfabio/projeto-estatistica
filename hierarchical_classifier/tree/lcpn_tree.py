@@ -86,4 +86,40 @@ class LCPNTree(Tree):
                 print('Child is {}'.format(root_node.child[i].class_name))
                 self.train_lcpn(root_node.child[i])
 
+    def predict_lcpn(self, root_node, sample):
 
+        # Testing if the node is leaf
+        if len(root_node.child) == 0:
+            print('Leaf node reached. Class: {}'.format(root_node.class_name))
+            return root_node.class_name
+        else:
+            # Retrieve the classifier
+            classifier = root_node.classifier
+            print('Started Prediction...'.format(root_node.class_name))
+            predicted_class = classifier.prediction(sample)
+
+            # Retrieve the number of children for the current node
+            children = len(root_node.child)
+            print('Current Node {} has {} child/children'.format(root_node.class_name, children))
+
+            # Iterate over the current node child to check which child was the prediction
+            for i in range(children):
+                child_class = root_node.child[i].class_name
+
+                # When the correct child is found, we will continue calling the recursion
+                if child_class == predicted_class:
+                    print('Child predicted is {}'.format(child_class))
+                    return self.predict_lcpn(root_node.child[i], sample)
+
+    def predict_from_sample_lcpn(self, root_node, test_inputs):
+        predicted_classes = []
+        i = 0
+
+        for sample in test_inputs:
+            predicted_class = self.predict_lcpn(root_node, sample)
+
+            predicted_classes.append(predicted_class)
+            print('Record being predicted {}/{}'.format(i, len(test_inputs)))
+            i += 1
+
+        return predicted_classes

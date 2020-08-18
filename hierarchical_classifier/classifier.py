@@ -24,6 +24,8 @@ tree.retrieve_lcpn_data(class_tree, train_data_frame)
 tree.train_lcpn(class_tree)
 
 # 6. Predict
-
+[inputs_test, outputs_test] = slice_data(test_data_frame)
+predicted_classes = tree.predict_from_sample_lcpn(class_tree, inputs_test)
 
 # 7. Calculate the results
+print('Classification completed')
