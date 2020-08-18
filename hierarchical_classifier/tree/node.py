@@ -7,4 +7,7 @@ class Node:
         self.data_class_relationship = data_class_relationship
         self.child = []
         self.data = None
+        self.classifier = None
 
+    def set_classifier(self, classifier):
+        self.classifier = classifier

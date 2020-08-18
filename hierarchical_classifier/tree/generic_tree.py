@@ -6,8 +6,9 @@ from utils.tree_utils import get_possible_classes, find_parent
 
 class Tree():
 
-    def __init__(self, possible_classes):
+    def __init__(self, possible_classes, classification_algorithm):
         self.possible_classes = possible_classes
+        self.classification_algorithm = classification_algorithm
 
     def find_node(self, root, node_class):
 
