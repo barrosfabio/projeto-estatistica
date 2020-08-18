@@ -1,10 +1,11 @@
 from sklearn.ensemble import RandomForestClassifier
 
 
-class ClassificationAlgorithm():
+class ClassificationAlgorithm:
 
     def __init__(self, option):
         if option == 'rf':
+            self.classifier_name = option
             self.classifier = RandomForestClassifier(n_estimators=150, criterion='gini')
 
     def train(self, dataset):

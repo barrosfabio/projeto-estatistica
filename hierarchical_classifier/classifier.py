@@ -1,5 +1,6 @@
 from utils.data_utils import *
 from hierarchical_classifier.tree.lcpn_tree import LCPNTree
+from hierarchical_classifier.evaluation.hierarchical_metrics import hierarchical_recall, hierarchical_precision, hierarchical_fmeasure
 
 # Steps to build a hierarchical classifier
 
@@ -25,7 +26,15 @@ tree.train_lcpn(class_tree)
 
 # 6. Predict
 [inputs_test, outputs_test] = slice_data(test_data_frame)
-predicted_classes = tree.predict_from_sample_lcpn(class_tree, inputs_test)
+predicted_classes = np.array(tree.predict_from_sample_lcpn(class_tree, inputs_test))
 
 # 7. Calculate the results
+hp = hierarchical_precision(predicted_classes, outputs_test)
+hr = hierarchical_recall(predicted_classes, outputs_test)
+hf = hierarchical_fmeasure(hp, hr)
+
+print('\n-------------------Results Summary-------------------')
+print('Hierarchical Precision: {}'.format(hp))
+print('Hierarchical Recall: {}'.format(hr))
+print('Hierarchical F-Measure: {}'.format(hf))
 print('Classification completed')
