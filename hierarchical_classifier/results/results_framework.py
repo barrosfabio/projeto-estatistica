@@ -23,13 +23,17 @@ class ResultsFramework:
 
     def __init__(self, results_path):
         self.results_path = results_path
+        if not os.path.isdir(self.results_path):
+            os.mkdir(self.results_path)
 
     """
         This method writes a data_frame to CSV
     """
-    def write_csv(self, file_name, data_frame):
-        csv_file_path = self.results_path + file_name + '.csv'
+    def write_csv(self,file_name, data_frame):
+        csv_file_path = file_name + '.csv'
         header = list(data_frame.columns.values)
+
+        print('Saving file to path: {}'.format(csv_file_path))
 
         with open(csv_file_path, 'w', newline='') as csvfile:
             filewriter = csv.writer(csvfile, delimiter=',',
@@ -40,9 +44,8 @@ class ResultsFramework:
 
             # Write all the other rows
             for row in data_frame.iterrows():
-                filewriter.writerow(row.aslist())
+                filewriter.writerow(row)
 
-        csvfile.close()
 
     """
         This method prints and plots the confusion matrix.

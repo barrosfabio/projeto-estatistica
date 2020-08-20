@@ -3,6 +3,7 @@ from hierarchical_classifier.tree.lcpn_tree import LCPNTree
 from hierarchical_classifier.evaluation.hierarchical_metrics import hierarchical_recall, hierarchical_precision, \
     hierarchical_fmeasure
 from hierarchical_classifier.resampling.resampling_algorithm import ResamplingAlgorithm
+from hierarchical_classifier.results.result_dto import ResultDTO
 
 FLAT_RESAMPLING_STRATEGY = 'flat'
 HIERARCHICAL_RESAMPLING_STRATEGY = 'hierarchical'
@@ -50,8 +51,11 @@ class HierarchicalClassificationPipeline:
         hr = hierarchical_recall(predicted_classes, outputs_test)
         hf = hierarchical_fmeasure(hp, hr)
 
+
         print('\n-------------------Results Summary-------------------')
         print('Hierarchical Precision: {}'.format(hp))
         print('Hierarchical Recall: {}'.format(hr))
         print('Hierarchical F-Measure: {}'.format(hf))
         print('Classification completed')
+
+        return ResultDTO(hp, hr, hf, self.resampling_algorithm, self.resampling_strategy)
