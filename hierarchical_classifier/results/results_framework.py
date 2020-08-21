@@ -5,6 +5,7 @@ import csv
 import os
 import seaborn as sns
 import operator
+from hierarchical_classifier.constants.utils_constants import CSV_SEPARATOR
 
 
 def count_by_class(output_values):
@@ -36,14 +37,14 @@ class ResultsFramework:
         print('Saving file to path: {}'.format(csv_file_path))
 
         with open(csv_file_path, 'w', newline='') as csvfile:
-            filewriter = csv.writer(csvfile, delimiter=',',
+            filewriter = csv.writer(csvfile, delimiter='CSV_SEPARATOR',
                                     quotechar='|', quoting=csv.QUOTE_MINIMAL, dialect='excel')
 
             # Write the header of the table
             filewriter.writerow(header)
 
             # Write all the other rows
-            for row in data_frame.iterrows():
+            for index, row in data_frame.iterrows():
                 filewriter.writerow(row)
 
 

@@ -77,3 +77,11 @@ def hierarchical_fmeasure(hierarchical_precision, hierarchical_recall):
     else:
         hf1 = (2 * hierarchical_precision * hierarchical_recall) / (hierarchical_precision + hierarchical_recall)
         return hf1
+
+
+def calculate_hierarchical_metrics(predicted_classes, outputs_test):
+    hp = hierarchical_precision(predicted_classes, outputs_test)
+    hr = hierarchical_recall(predicted_classes, outputs_test)
+    hf = hierarchical_fmeasure(hp, hr)
+
+    return [hp, hr, hf]

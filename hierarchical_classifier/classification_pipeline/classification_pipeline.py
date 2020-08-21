@@ -1,9 +1,8 @@
 from utils.data_utils import *
 from hierarchical_classifier.tree.lcpn_tree import LCPNTree
-from hierarchical_classifier.evaluation.hierarchical_metrics import hierarchical_recall, hierarchical_precision, \
-    hierarchical_fmeasure
+from hierarchical_classifier.evaluation.hierarchical_metrics import calculate_hierarchical_metrics
 from hierarchical_classifier.resampling.resampling_algorithm import ResamplingAlgorithm
-from hierarchical_classifier.results.result_dto import ResultDTO
+from hierarchical_classifier.results.final_result_dto import FinalResultDTO
 
 FLAT_RESAMPLING_STRATEGY = 'flat'
 HIERARCHICAL_RESAMPLING_STRATEGY = 'hierarchical'
@@ -46,11 +45,8 @@ class HierarchicalClassificationPipeline:
         [inputs_test, outputs_test] = slice_data(test_data_frame)
         predicted_classes = np.array(tree.predict_from_sample_lcpn(class_tree, inputs_test))
 
-        # 7. Calculate the results
-        hp = hierarchical_precision(predicted_classes, outputs_test)
-        hr = hierarchical_recall(predicted_classes, outputs_test)
-        hf = hierarchical_fmeasure(hp, hr)
-
+        # 7. Calculate the final results
+        [hp, hr, hf] = calculate_hierarchical_metrics(predicted_classes, outputs_test)
 
         print('\n-------------------Results Summary-------------------')
         print('Hierarchical Precision: {}'.format(hp))
@@ -58,4 +54,4 @@ class HierarchicalClassificationPipeline:
         print('Hierarchical F-Measure: {}'.format(hf))
         print('Classification completed')
 
-        return ResultDTO(hp, hr, hf, self.resampling_algorithm, self.resampling_strategy)
+        return FinalResultDTO(hp, hr, hf, self.resampling_algorithm, self.resampling_strategy)
