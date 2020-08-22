@@ -4,48 +4,11 @@ from matplotlib import pyplot as plt
 import csv
 import os
 import seaborn as sns
-import operator
-from hierarchical_classifier.constants.utils_constants import CSV_SEPARATOR
-
-
-def count_by_class(output_values):
-    label_count = np.unique(output_values, return_counts=True)
-    key_count_dict = {}
-    genres = label_count[0]
-    counts = label_count[1]
-    for i in range(0, len(genres)):
-        key_count_dict[genres[i]] = counts[i]
-
-    sorted_dict = dict(sorted(key_count_dict.items(), key=operator.itemgetter(1), reverse=True))
-    return sorted_dict
-
 
 class ResultsFramework:
 
     def __init__(self, results_path):
         self.results_path = results_path
-        if not os.path.isdir(self.results_path):
-            os.mkdir(self.results_path)
-
-    """
-        This method writes a data_frame to CSV
-    """
-    def write_csv(self,file_name, data_frame):
-        csv_file_path = file_name + '.csv'
-        header = list(data_frame.columns.values)
-
-        print('Saving file to path: {}'.format(csv_file_path))
-
-        with open(csv_file_path, 'w', newline='') as csvfile:
-            filewriter = csv.writer(csvfile, delimiter='CSV_SEPARATOR',
-                                    quotechar='|', quoting=csv.QUOTE_MINIMAL, dialect='excel')
-
-            # Write the header of the table
-            filewriter.writerow(header)
-
-            # Write all the other rows
-            for index, row in data_frame.iterrows():
-                filewriter.writerow(row)
 
 
     """

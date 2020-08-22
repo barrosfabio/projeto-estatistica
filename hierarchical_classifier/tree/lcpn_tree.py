@@ -3,6 +3,9 @@ from utils.data_utils import slice_data
 from hierarchical_classifier.tree.data import Data
 from hierarchical_classifier.classification.classification_algorithm import ClassificationAlgorithm
 import numpy as np
+from hierarchical_classifier.constants.resampling_constants import HIERARCHICAL_RESAMPLING
+from hierarchical_classifier.resampling.resampling_algorithm import ResamplingAlgorithm
+
 
 CLASS_SEPARATOR = '/'
 
@@ -39,10 +42,17 @@ class LCPNTree(Tree):
             # Retrieve the filtered data from the data_frame
             positive_classes_data = data_frame[data_frame['class'].isin(positive_classes)]
 
+            # Resampling for each parent node data
+            if self.resampling_strategy == HIERARCHICAL_RESAMPLING:
+                unique_classes = np.unique(positive_classes_data.iloc[:,-1])
+                if len(unique_classes) > 1:
+                    resampling_algorithm = ResamplingAlgorithm(self.resampling_strategy, self.resampling_algorithm, 4)
+                    positive_classes_data = resampling_algorithm.resample(positive_classes_data)
+
             # Slice data in inputs and outputs
             [input_data, output_data] = slice_data(positive_classes_data)
 
-            # Relabel the outputs
+            # Relabel the outputs to the child classes
             output_data = relabel_outputs_lcpn(output_data, root_node.class_name)
 
             # Store the data in the node

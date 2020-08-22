@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import os
+import operator
 import seaborn as sns
 import pandas as pd
 from sklearn.model_selection import train_test_split
@@ -26,31 +26,28 @@ def count_per_class(output_data):
         print('Class {}, Count {}'.format(classes[i], count[i]))
     print('')
 
-def plot_class_dist(dict_values, image_path,  image_name):
+def count_by_class(output_values):
+    label_count = np.unique(output_values, return_counts=True)
+    key_count_dict = {}
+    genres = label_count[0]
+    counts = label_count[1]
+    count = pd.DataFrame()
 
-    path = image_path
-    if not os.path.isdir(path):
-        os.mkdir(path)
-    path = path + '_' + image_name + '.png'
+    for i in range(0, len(genres)):
+        key_count_dict[genres[i]] = counts[i]
 
-    x = np.empty(0)
-    y = np.empty(0)
-    i = 0;
-    for key, value in dict_values.items():
-        x = np.append(x, key)
-        y = np.append(y, value)
-        i += 1
+    sorted_dict = dict(sorted(key_count_dict.items(), key=operator.itemgetter(1), reverse=True))
 
-    plt.figure(figsize=(45, 45))
-    sns.barplot(x=x, y=y)
-    plt.xticks(rotation=90)
-    plt.savefig(path)
-    plt.cla()
-    plt.close()
+    for key, value in sorted_dict.items():
+        row = {'class': key, 'count': count}
+        count.append(row, ignore_index=True)
+
+    return count
 
 def slice_and_split_data_holdout(input_data, output_data, test_percentage):
     print('Original class distribution')
     count_per_class(output_data)
+    # TODO: Print the original class distribution here
     # Splitting the dataset in training/test using the Holdout technique
     inputs_train, inputs_test, outputs_train, outputs_test = train_test_split(input_data, output_data,
                                                                               test_size=test_percentage,
