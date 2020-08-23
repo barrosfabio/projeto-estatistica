@@ -1,10 +1,12 @@
 from utils.data_utils import *
+from utils.results_utils import build_and_plot_conf_matrix
 from hierarchical_classifier.tree.lcpn_tree import LCPNTree
 from hierarchical_classifier.evaluation.hierarchical_metrics import calculate_hierarchical_metrics
 from hierarchical_classifier.resampling.resampling_algorithm import ResamplingAlgorithm
 from hierarchical_classifier.results.dto.final_result_dto import FinalResultDTO
 from hierarchical_classifier.results.local_results_framework import LocalResultsFramework
 from hierarchical_classifier.constants.resampling_constants import FLAT_RESAMPLING
+from hierarchical_classifier.configurations.global_config import GlobalConfig
 
 
 class HierarchicalClassificationPipeline:
@@ -18,6 +20,7 @@ class HierarchicalClassificationPipeline:
         self.resampling_strategy = resampling_strategy
 
     def run(self):
+
         # Steps to build a hierarchical classifier
 
         # 1. From the outputs array, use it to build the class_tree and to get the positive and negative classes according to
@@ -47,7 +50,8 @@ class HierarchicalClassificationPipeline:
         local_results.save_to_csv()
 
         [hp, hr, hf] = calculate_hierarchical_metrics(predicted_classes, outputs_test)
-
+        # TODO: Calculate and save confusion matrix for each experiment
+        self.plot_confusion_matrix(outputs_test, predicted_classes)
 
         print('\n-------------------Results Summary-------------------')
         print('Hierarchical Precision: {}'.format(hp))
@@ -56,3 +60,13 @@ class HierarchicalClassificationPipeline:
         print('Classification completed')
 
         return FinalResultDTO(hp, hr, hf, self.resampling_algorithm, self.resampling_strategy)
+
+
+    def plot_confusion_matrix(self, outputs_test, predicted_classes):
+        # Global Configurations
+        global_config = GlobalConfig.instance()
+
+        image_path = global_config.directory_list['confusion_matrix_' + self.resampling_strategy]
+        image_path = image_path + '/confusion_matrix_'+self.resampling_algorithm
+        print('Plotting Confusion Matrix to {}'.format(image_path))
+        build_and_plot_conf_matrix(image_path, output_array=outputs_test, predicted_array=predicted_classes)

@@ -73,6 +73,9 @@ class ResamplingAlgorithm:
     def save_class_distribution(self, before_resample, after_resample):
         global_config = GlobalConfig.instance()
         data_dist_path = global_config.directory_list['distribution_' + self.resampling_strategy]
+        data_dist_path = data_dist_path + '/' + self.algorithm_name
+        if not os.path.isdir(data_dist_path):
+            os.mkdir(data_dist_path)
 
         if self.resampling_strategy == HIERARCHICAL_RESAMPLING:
             class_name  = self.class_name.replace('/','_')

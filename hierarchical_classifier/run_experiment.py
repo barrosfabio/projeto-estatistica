@@ -8,7 +8,6 @@ from utils.data_utils import load_csv_data
 train_path = 'C:/Users/Fabio Barros/Git/projeto-estatistica/feature_extraction/result/covid_feature_matrix_train.csv'
 test_path = 'C:/Users/Fabio Barros/Git/projeto-estatistica/feature_extraction/result/covid_feature_matrix_test.csv'
 result_path = 'C:/Users/Fabio Barros/Git/projeto-estatistica/final_results/experiment_result'
-resampling_algorithm = 'smote'
 classifier_name = 'rf'
 
 results_list = []
