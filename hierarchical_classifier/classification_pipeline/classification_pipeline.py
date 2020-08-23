@@ -20,27 +20,27 @@ class HierarchicalClassificationPipeline:
     def run(self):
         # Steps to build a hierarchical classifier
 
-        # 3. From the outputs array, use it to build the class_tree and to get the positive and negative classes according to
+        # 1. From the outputs array, use it to build the class_tree and to get the positive and negative classes according to
         # a policy
         tree = LCPNTree(self.unique_classes, self.classifier_name, self.resampling_strategy, self.resampling_algorithm)
         class_tree = tree.build_tree()
 
-        # 4. From the class_tree, retrieve the data for each node, based on the list of positive and negative classes
+        # 2. From the class_tree, retrieve the data for each node, based on the list of positive and negative classes
         # If FLAT_SAMPLING_STRATEGY is chosen, we will resample the training data here
         if self.resampling_strategy == FLAT_RESAMPLING:
             resampling_algorithm = ResamplingAlgorithm(self.resampling_strategy, self.resampling_algorithm, 4)
-            train_data_frame = resampling_algorithm.resample(self.train_data_frame)
+            self.train_data_frame = resampling_algorithm.resample(self.train_data_frame)
 
-        tree.retrieve_lcpn_data(class_tree, train_data_frame)
+        tree.retrieve_lcpn_data(class_tree, self.train_data_frame)
 
-        # 5. Train the classifiers
+        # 3. Train the classifiers
         tree.train_lcpn(class_tree)
 
-        # 6. Predict
+        # 4. Predict
         [inputs_test, outputs_test] = slice_data(self.test_data_frame)
         predicted_classes = np.array(tree.predict_from_sample_lcpn(class_tree, inputs_test))
 
-        # 7. Calculate the final/local results
+        # 5. Calculate the final/local results
         local_results = LocalResultsFramework(self.resampling_strategy, self.resampling_algorithm)
         local_results.calculate_perclass_metrics(outputs_test, predicted_classes)
         local_results.calculate_parent_node_metrics(class_tree, outputs_test, predicted_classes)

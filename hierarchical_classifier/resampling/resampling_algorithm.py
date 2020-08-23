@@ -11,11 +11,10 @@ import os
 
 class ResamplingAlgorithm:
 
-    def __init__(self, resampling_strategy, algorithm_name, k_neighbors):
+    def __init__(self, resampling_strategy, algorithm_name, k_neighbors, class_name=None):
         self.resampling_strategy = resampling_strategy
         self.algorithm_name = algorithm_name
-        global_config = GlobalConfig.instance()
-        self.data_dist_path = global_config.data_distribution_dir
+        self.class_name = class_name
 
         if algorithm_name == SMOTE_RESAMPLE:
             self.resampler = SMOTE(sampling_strategy='auto', k_neighbors=k_neighbors, random_state=42, n_jobs=4)
@@ -38,13 +37,32 @@ class ResamplingAlgorithm:
 
         [input_data, output_data] = slice_data(data_frame)
         before_resample = count_by_class(output_data)
-        write_csv(self.data_dist_path + '/before_resample_'+ self.resampling_strategy + '_' + self.algorithm_name, before_resample)
 
         [input_data, output_data] = self.resampler.fit_resample(input_data, output_data)
         after_resample = count_by_class(output_data)
-        write_csv(self.data_dist_path  + '/after_resample'+ self.resampling_strategy + '_' + self.algorithm_name, after_resample)
+
+        self.save_class_distribution(before_resample, after_resample)
 
         resampled_data_frame = pd.DataFrame(input_data)
         resampled_data_frame['class'] = output_data
 
         return resampled_data_frame
+
+
+    def save_class_distribution(self, before_resample, after_resample):
+        global_config = GlobalConfig.instance()
+        data_dist_path = global_config.hierarchical_data_dist + '/' + self.algorithm_name
+        if not os.path.isdir(data_dist_path):
+            os.mkdir(data_dist_path)
+
+        if self.resampling_strategy == HIERARCHICAL_RESAMPLING:
+            class_name  = self.class_name.replace('/','_')
+            before_file_name = data_dist_path + '/before_resample_' + self.resampling_strategy + '_' + self.algorithm_name + '_' + class_name
+            after_file_name = data_dist_path + '/after_resample_' + self.resampling_strategy + '_' + self.algorithm_name + '_' + class_name
+        else:
+            data_dist_path = global_config.data_distribution_dir
+            before_file_name = data_dist_path + '/before_resample_' + self.resampling_strategy + '_' + self.algorithm_name
+            after_file_name = data_dist_path + '/after_resample_' + self.resampling_strategy + '_' + self.algorithm_name
+
+        write_csv(before_file_name, before_resample)
+        write_csv(after_file_name, after_resample)

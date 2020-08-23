@@ -46,7 +46,7 @@ class LCPNTree(Tree):
             if self.resampling_strategy == HIERARCHICAL_RESAMPLING:
                 unique_classes = np.unique(positive_classes_data.iloc[:,-1])
                 if len(unique_classes) > 1:
-                    resampling_algorithm = ResamplingAlgorithm(self.resampling_strategy, self.resampling_algorithm, 4)
+                    resampling_algorithm = ResamplingAlgorithm(self.resampling_strategy, self.resampling_algorithm, 4, root_node.class_name)
                     positive_classes_data = resampling_algorithm.resample(positive_classes_data)
 
             # Slice data in inputs and outputs

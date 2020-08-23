@@ -13,12 +13,11 @@ classifier_name = 'rf'
 
 results_list = []
 resampling_algorithms = [SMOTE_RESAMPLE]
-resampling_strategies = [FLAT_RESAMPLING]
+resampling_strategies = [HIERARCHICAL_RESAMPLING]
 
 create_result_directories(result_path)
 
-# 1. Load the data from a CSV file
-# 2. Get inputs and outputs
+# Load the data from a CSV file
 [train_data_frame, unique_train_classes] = load_csv_data(train_path)
 [test_data_frame, unique_test_classes] = load_csv_data(test_path)
 

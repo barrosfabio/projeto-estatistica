@@ -12,7 +12,8 @@ def create_result_directories(result_path):
     directory_list = {'result': result_path,
                       'global': result_path + '/global',
                       'local': result_path + '/local',
-                      'distribution': result_path + '/data_distribution'}
+                      'distribution': result_path + '/data_distribution',
+                      'hierarchical_local_dist': result_path + '/data_distribution/hierarchical_dist'}
 
     for key, value in directory_list.items():
         if not os.path.isdir(value):

@@ -19,5 +19,6 @@ class GlobalConfig():
         self.global_results_dir = directory_list['global']
         self.local_results_dir = directory_list['local']
         self.data_distribution_dir = directory_list['distribution']
+        self.hierarchical_data_dist = directory_list['hierarchical_local_dist']
 
 
