@@ -42,7 +42,7 @@ class ResamplingAlgorithm:
 
         [input_data, output_data] = self.resampler.fit_resample(input_data, output_data)
         after_resample = count_by_class(output_data)
-        write_csv(self.data_dist_path  + '/after_resample', after_resample)
+        write_csv(self.data_dist_path  + '/after_resample'+ self.resampling_strategy + '_' + self.algorithm_name, after_resample)
 
         resampled_data_frame = pd.DataFrame(input_data)
         resampled_data_frame['class'] = output_data

@@ -9,9 +9,10 @@ from hierarchical_classifier.constants.resampling_constants import FLAT_RESAMPLI
 
 class HierarchicalClassificationPipeline:
 
-    def __init__(self, train_path, test_path, resampling_algorithm, classifier_name, resampling_strategy):
-        self.train_path = train_path
-        self.test_path = test_path
+    def __init__(self, train_data_frame, test_data_frame, unique_classes, resampling_algorithm, classifier_name, resampling_strategy):
+        self.train_data_frame = train_data_frame
+        self.test_data_frame = test_data_frame
+        self.unique_classes = unique_classes
         self.resampling_algorithm = resampling_algorithm
         self.classifier_name = classifier_name
         self.resampling_strategy = resampling_strategy
@@ -19,21 +20,16 @@ class HierarchicalClassificationPipeline:
     def run(self):
         # Steps to build a hierarchical classifier
 
-        # 1. Load the data from a CSV file
-        # 2. Get inputs and outputs
-        [train_data_frame, unique_train_classes] = load_csv_data(self.train_path)
-        [test_data_frame, unique_test_classes] = load_csv_data(self.test_path)
-
         # 3. From the outputs array, use it to build the class_tree and to get the positive and negative classes according to
         # a policy
-        tree = LCPNTree(unique_train_classes, self.classifier_name, self.resampling_strategy, self.resampling_algorithm)
+        tree = LCPNTree(self.unique_classes, self.classifier_name, self.resampling_strategy, self.resampling_algorithm)
         class_tree = tree.build_tree()
 
         # 4. From the class_tree, retrieve the data for each node, based on the list of positive and negative classes
         # If FLAT_SAMPLING_STRATEGY is chosen, we will resample the training data here
         if self.resampling_strategy == FLAT_RESAMPLING:
             resampling_algorithm = ResamplingAlgorithm(self.resampling_strategy, self.resampling_algorithm, 4)
-            train_data_frame = resampling_algorithm.resample(train_data_frame)
+            train_data_frame = resampling_algorithm.resample(self.train_data_frame)
 
         tree.retrieve_lcpn_data(class_tree, train_data_frame)
 
@@ -41,7 +37,7 @@ class HierarchicalClassificationPipeline:
         tree.train_lcpn(class_tree)
 
         # 6. Predict
-        [inputs_test, outputs_test] = slice_data(test_data_frame)
+        [inputs_test, outputs_test] = slice_data(self.test_data_frame)
         predicted_classes = np.array(tree.predict_from_sample_lcpn(class_tree, inputs_test))
 
         # 7. Calculate the final/local results

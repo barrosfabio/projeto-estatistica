@@ -39,8 +39,8 @@ def count_by_class(output_values):
     sorted_dict = dict(sorted(key_count_dict.items(), key=operator.itemgetter(1), reverse=True))
 
     for key, value in sorted_dict.items():
-        row = {'class': key, 'count': count}
-        count.append(row, ignore_index=True)
+        row = {'class': key, 'count': value}
+        count = count.append(row, ignore_index=True)
 
     return count
 
