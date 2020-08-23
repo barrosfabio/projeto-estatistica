@@ -133,3 +133,4 @@ class LCPNTree(Tree):
             i += 1
 
         return predicted_classes
+

@@ -12,4 +12,11 @@ SVM_SMOTE = 'svm'
 ADASYN_RESAMPLER = 'adasyn'
 SMOTE_ENN = 'smote-enn'
 SMOTE_TOMEK = 'smote-tomek'
+RANDOM_UNDERSAMPLER = 'rus'
+NEIGHBOUR_CLEANING = 'ncr'
+TOMEK = 'tomek'
+ENN = 'enn'
+NEAR_MISS = 'near_miss'
+ALL_KNN = 'all-knn'
+
 

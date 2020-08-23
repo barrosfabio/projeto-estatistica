@@ -7,15 +7,15 @@ from utils.data_utils import load_csv_data
 
 train_path = 'C:/Users/Fabio Barros/Git/projeto-estatistica/feature_extraction/result/covid_feature_matrix_train.csv'
 test_path = 'C:/Users/Fabio Barros/Git/projeto-estatistica/feature_extraction/result/covid_feature_matrix_test.csv'
-result_path = 'C:/Users/Fabio Barros/Git/projeto-estatistica/hierarchical_classifier/csv_results/experiment_result'
+result_path = 'C:/Users/Fabio Barros/Git/projeto-estatistica/final_results/experiment_result'
 resampling_algorithm = 'smote'
 classifier_name = 'rf'
 
 results_list = []
-resampling_algorithms = [SMOTE_RESAMPLE]
-resampling_strategies = [HIERARCHICAL_RESAMPLING]
+resampling_algorithms = [SMOTE_RESAMPLE, SMOTE_ENN, SMOTE_TOMEK]
+resampling_strategies = [NONE, FLAT_RESAMPLING, HIERARCHICAL_RESAMPLING]
 
-create_result_directories(result_path)
+create_result_directories(result_path, resampling_strategies)
 
 # Load the data from a CSV file
 [train_data_frame, unique_train_classes] = load_csv_data(train_path)
@@ -39,5 +39,5 @@ for strategy in resampling_strategies:
         results_list.append(result)
 
 
-result_framework = GlobalResultsFramework(result_path)
+result_framework = GlobalResultsFramework()
 result_framework.transform_to_csv(results_list)

@@ -7,9 +7,9 @@ import os
 class GlobalResultsFramework(ResultsFramework):
     global_results_header = ['resampling_strategy','resampling_algorithm','hp','hr','hf']
 
-    def __init__(self, result_path):
+    def __init__(self):
         global_config = GlobalConfig.instance()
-        global_result_path = global_config.global_results_dir
+        global_result_path = global_config.directory_list['global']
         self.per_class_results = []
         self.per_parent_metrics = []
         super(GlobalResultsFramework, self).__init__(global_result_path)

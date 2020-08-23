@@ -12,7 +12,7 @@ class LocalResultsFramework(ResultsFramework):
 
     def __init__(self, resample_strategy, resample_algorithm):
         global_config = GlobalConfig.instance()
-        local_result_path = global_config.local_results_dir
+        local_result_path = global_config.directory_list['per_pipeline']
         self.resample_strategy = resample_strategy
         self.resample_algorithm = resample_algorithm
         self.per_class_results = []
@@ -119,15 +119,10 @@ class LocalResultsFramework(ResultsFramework):
         per_class_data_frame = self.list_to_data_frame(self.per_class_results)
         per_parent_data_frame = self.list_to_data_frame(self.per_parent_metrics)
 
-        per_class_path = self.results_path + '/per_class_result'
-        per_parent_path = self.results_path + '/per_parent_result'
+        global_config = GlobalConfig.instance()
+        per_class_path = global_config.directory_list['per_class_' + self.resample_strategy]
+        per_parent_path = global_config.directory_list['per_parent_node_' + self.resample_strategy]
 
-        if not os.path.isdir(per_class_path):
-            os.mkdir(per_class_path)
-
-        if not os.path.isdir(per_parent_path):
-            os.mkdir(per_parent_path)
-
-        write_csv(per_class_path + '/per_class_metrics_'+self.resample_strategy+'_'+self.resample_algorithm, per_class_data_frame)
-        write_csv(per_parent_path + '/per_parent_metrics_'+self.resample_strategy+'_'+self.resample_algorithm, per_parent_data_frame)
+        write_csv(per_class_path + '/per_class_metrics_' + self.resample_algorithm, per_class_data_frame)
+        write_csv(per_parent_path + '/per_parent_metrics_' + self.resample_algorithm, per_parent_data_frame)
 
