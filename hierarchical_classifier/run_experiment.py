@@ -11,7 +11,7 @@ result_path = 'C:/Users/Fabio Barros/Git/projeto-estatistica/final_results/exper
 classifier_name = 'rf'
 
 results_list = []
-resampling_algorithms = [SMOTE_RESAMPLE, SMOTE_ENN, SMOTE_TOMEK]
+resampling_algorithms = [SMOTE_RESAMPLE, SMOTE_ENN, SMOTE_TOMEK, RANDOM_OVERSAMPLER, RANDOM_UNDERSAMPLER, NEAR_MISS]
 resampling_strategies = [NONE, FLAT_RESAMPLING, HIERARCHICAL_RESAMPLING]
 
 create_result_directories(result_path, resampling_strategies)

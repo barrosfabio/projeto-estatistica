@@ -41,17 +41,17 @@ class ResamplingAlgorithm:
         elif algorithm_name == SVM_SMOTE:
             return SVMSMOTE(sampling_strategy=sampling_strategy, random_state=42, n_jobs=n_jobs, k_neighbors=k_neighbors)
         elif algorithm_name == RANDOM_UNDERSAMPLER:
-            return RandomUnderSampler(sampling_strategy=sampling_strategy, random_state=42)
+            return RandomUnderSampler(sampling_strategy='majority')
         elif algorithm_name == NEIGHBOUR_CLEANING:
-            return NeighbourhoodCleaningRule(sampling_strategy=sampling_strategy, random_state=42, n_jobs=n_jobs)
+            return NeighbourhoodCleaningRule(sampling_strategy='majority', n_jobs=n_jobs)
         elif algorithm_name == TOMEK:
-            return TomekLinks(sampling_strategy=sampling_strategy, random_state=42, n_jobs=n_jobs)
+            return TomekLinks(sampling_strategy='majority', n_jobs=n_jobs)
         elif algorithm_name == ENN:
-            return EditedNearestNeighbours(sampling_strategy=sampling_strategy, random_state=42, n_jobs=n_jobs)
+            return EditedNearestNeighbours(sampling_strategy='majority', n_jobs=n_jobs)
         elif algorithm_name == NEAR_MISS:
-            return NearMiss(sampling_strategy=sampling_strategy, random_state=42, n_jobs=n_jobs)
+            return NearMiss(sampling_strategy='majority', n_jobs=n_jobs)
         elif algorithm_name == ALL_KNN:
-            return AllKNN(sampling_strategy=sampling_strategy, random_state=42, n_jobs=n_jobs)
+            return AllKNN(sampling_strategy='majority', n_jobs=n_jobs)
 
     # Executes resampling
     def resample(self, data_frame):

@@ -17,6 +17,7 @@ def create_result_directories(result_path, resampling_strategies):
                       'per_parent_node': result_path + '/per_pipeline/per_parent_node',
                       'confusion_matrix': result_path + '/per_pipeline/confusion_matrix',
                       'pipeline_results': result_path + '/per_pipeline/pipeline_results',
+                      'per_parent_cm': result_path + '/per_pipeline/per_parent_conf_matrix',
                       'distribution': result_path + '/data_distribution'}
 
     # Adding directories for each resampling strategy
@@ -26,6 +27,7 @@ def create_result_directories(result_path, resampling_strategies):
         directory_list['confusion_matrix_' + strategy] = directory_list['confusion_matrix'] + '/' + strategy
         directory_list['pipeline_results_' + strategy] = directory_list['pipeline_results'] + '/' + strategy
         directory_list['distribution_' + strategy] = directory_list['distribution'] + '/' + strategy
+        directory_list['per_parent_cm_' + strategy] = directory_list['per_parent_cm'] + '/' + strategy
 
     for key, value in directory_list.items():
         if not os.path.isdir(value):

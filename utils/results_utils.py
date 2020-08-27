@@ -61,9 +61,9 @@ def plot_confusion_matrix(cm, classes, image_name,
     plt.close()
 
 
-def build_and_plot_conf_matrix(image_path, output_array, predicted_array, normalize=True):
+def build_and_plot_conf_matrix(image_path, output_array, predicted_array, normalize=False):
 
-    conf_matrix_lbl = np.unique(output_array)
+    conf_matrix_lbl = np.unique(predicted_array)
     conf_matrix = confusion_matrix(output_array, predicted_array)
     conf_matrix_path = image_path + '.png'
 
