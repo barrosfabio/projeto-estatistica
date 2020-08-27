@@ -5,7 +5,7 @@ from utils.data_utils import slice_data, slice_and_split_data_holdout
 
 # Input parameters
 # path of the images
-images_directory = '../images'
+images_directory = 'C:/Users/Fabio Barros/Git/projeto-estatistica/imagens-covid/imagensOrganizadas'
 
 # Type of extractor
 lbp_extractor = 'nri_uniform'
@@ -23,18 +23,18 @@ test_percentage = 0.4
 print("Started to extract features...")
 feature_matrix = create_feature_matrix(images_directory, lbp_extractor)
 print("Saving Original Feature Matrix to CSV")
-feature_matrix.to_csv(feature_matrix_path + '/covid_feature_matrix.csv', index=False)
+feature_matrix.to_csv(feature_matrix_path + '/covid_canada_feature_matrix.csv', index=False)
 
-print("Splitting Training and Test datasets using holdout...")
-input_data, output_data= slice_data(feature_matrix)
+# print("Splitting Training and Test datasets using holdout...")
+# input_data, output_data= slice_data(feature_matrix)
 
-[train_data_frame, test_data_frame] = slice_and_split_data_holdout(input_data, output_data, test_percentage)
-
-print("Saving Both Feature Matrices to " + feature_matrix_path)
-
-train_data_frame.to_csv(feature_matrix_path + '/covid_feature_matrix_train.csv', index=False)
-print("Saving Train Feature Matrix to CSV Completed.")
-test_data_frame.to_csv(feature_matrix_path + '/covid_feature_matrix_test.csv', index=False)
-print("Saving Test Feature Matrix to CSV Completed.")
+# [train_data_frame, test_data_frame] = slice_and_split_data_holdout(input_data, output_data, test_percentage)
+#
+# print("Saving Both Feature Matrices to " + feature_matrix_path)
+#
+# train_data_frame.to_csv(feature_matrix_path + '/covid_feature_matrix_train.csv', index=False)
+# print("Saving Train Feature Matrix to CSV Completed.")
+# test_data_frame.to_csv(feature_matrix_path + '/covid_feature_matrix_test.csv', index=False)
+# print("Saving Test Feature Matrix to CSV Completed.")
 
 
