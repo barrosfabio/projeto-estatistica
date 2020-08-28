@@ -59,6 +59,7 @@ class PipeleineResultsFramework(ResultsFramework):
         return [hp, hr, hf]
 
     def calculate_perclass_metrics(self, output_array, predicted_array):
+        per_class_metrics = []
         unique_classes = np.unique(output_array)
 
         # Do it for each expected class
@@ -71,7 +72,10 @@ class PipeleineResultsFramework(ResultsFramework):
             print('Results Summary for class {}'.format(current_class))
             [hp, hr, hf] = self.calculate_local_metrics(filtered_predicted_array, filtered_output_array)
 
-            self.per_class_results.append(LocalResultDTO(hp, hr, hf, current_class))
+            per_class_metrics.append(LocalResultDTO(hp, hr, hf, current_class))
+
+        self.per_class_results = per_class_metrics
+        return per_class_metrics
 
 
     def calculate_parent_node_metrics(self, root_node, output_array, predicted_array):
@@ -117,16 +121,17 @@ class PipeleineResultsFramework(ResultsFramework):
 
         return data_frame
 
-    def save_to_csv(self):
-        per_class_data_frame = self.list_to_data_frame(self.per_class_results)
-        per_parent_data_frame = self.list_to_data_frame(self.per_parent_metrics)
+    def save_to_csv(self, result_type):
+
+        if result_type == 'per_class':
+            data_frame = self.list_to_data_frame(self.per_class_results)
+        elif result_type == 'per_parent':
+            data_frame = self.list_to_data_frame(self.per_parent_metrics)
 
         global_config = GlobalConfig.instance()
-        per_class_path = global_config.directory_list['per_class_' + self.resample_strategy]
-        per_parent_path = global_config.directory_list['per_parent_node_' + self.resample_strategy]
+        path = global_config.directory_list[result_type + '_' + self.resample_strategy]
 
-        write_csv(per_class_path + '/per_class_metrics_' + self.resample_algorithm, per_class_data_frame)
-        write_csv(per_parent_path + '/per_parent_metrics_' + self.resample_algorithm, per_parent_data_frame)
+        write_csv(path + result_type +'_metrics_' + self.resample_algorithm, data_frame)
 
     def plot_confusion_matrix(self, outputs_test, predicted_classes, local_cm=False, parent_class = None):
         # Global Configurations

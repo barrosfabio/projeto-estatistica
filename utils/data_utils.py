@@ -47,7 +47,6 @@ def count_by_class(output_values):
 def slice_and_split_data_holdout(input_data, output_data, test_percentage):
     print('Original class distribution')
     count_per_class(output_data)
-    # TODO: Print the original class distribution here
     # Splitting the dataset in training/test using the Holdout technique
     inputs_train, inputs_test, outputs_train, outputs_test = train_test_split(input_data, output_data,
                                                                               test_size=test_percentage,
@@ -72,3 +71,10 @@ def slice_data(dataset):
     output_data = dataset.iloc[:, -1].values
 
     return [input_data, output_data]
+
+# Function to transform inputs and outputs into a data_frame
+def array_to_data_frame(inputs, outputs):
+    new_data_frame = pd.DataFrame(inputs)
+    new_data_frame['class'] = outputs
+
+    return new_data_frame

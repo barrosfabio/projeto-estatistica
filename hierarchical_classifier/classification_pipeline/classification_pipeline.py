@@ -2,20 +2,22 @@ from utils.data_utils import *
 from hierarchical_classifier.tree.lcpn_tree import LCPNTree
 from hierarchical_classifier.evaluation.hierarchical_metrics import calculate_hierarchical_metrics
 from hierarchical_classifier.resampling.resampling_algorithm import ResamplingAlgorithm
-from hierarchical_classifier.results.dto.final_result_dto import FinalResultDTO
+from hierarchical_classifier.results.dto.pipeline_result_dto import PipelineResultDTO
+from hierarchical_classifier.results.dto.result_dto import ResultDTO
 from hierarchical_classifier.results.pipeline_results_framework import PipeleineResultsFramework
 from hierarchical_classifier.constants.resampling_constants import FLAT_RESAMPLING
 
 
 class HierarchicalClassificationPipeline:
 
-    def __init__(self, train_data_frame, test_data_frame, unique_classes, resampling_algorithm, classifier_name, resampling_strategy):
+    def __init__(self, train_data_frame, test_data_frame, unique_classes, resampling_algorithm, classifier_name, resampling_strategy, fold):
         self.train_data_frame = train_data_frame
         self.test_data_frame = test_data_frame
         self.unique_classes = unique_classes
         self.resampling_algorithm = resampling_algorithm
         self.classifier_name = classifier_name
         self.resampling_strategy = resampling_strategy
+        self.fold = fold
 
     def run(self):
 
@@ -43,9 +45,8 @@ class HierarchicalClassificationPipeline:
 
         # 5. Calculate the final/local results
         pipeline_results = PipeleineResultsFramework(self.resampling_strategy, self.resampling_algorithm)
-        pipeline_results.calculate_perclass_metrics(outputs_test, predicted_classes)
-        pipeline_results.calculate_parent_node_metrics(class_tree, outputs_test, predicted_classes)
-        pipeline_results.save_to_csv()
+        per_class_metrics = pipeline_results.calculate_perclass_metrics(outputs_test, predicted_classes)
+        pipeline_results.save_to_csv('per_class')
         pipeline_results.plot_confusion_matrix(outputs_test, predicted_classes)
 
         [hp, hr, hf] = calculate_hierarchical_metrics(predicted_classes, outputs_test)
@@ -56,6 +57,6 @@ class HierarchicalClassificationPipeline:
         print('Hierarchical F-Measure: {}'.format(hf))
         print('Classification completed')
 
-        return FinalResultDTO(hp, hr, hf, self.resampling_algorithm, self.resampling_strategy)
+        return PipelineResultDTO(ResultDTO(hp, hr, hf), per_class_metrics, self.resampling_algorithm, self.resampling_strategy, self.fold)
 
 

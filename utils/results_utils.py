@@ -71,3 +71,37 @@ def build_and_plot_conf_matrix(image_path, output_array, predicted_array, normal
                           normalize=normalize,
                           title='Confusion Matrix')
 
+def parse_result_metrics_list(fold_result_list):
+    result_metrics_list = []
+
+    for result in fold_result_list:
+        result_metrics_list.append(result.result_metrics)
+    return result_metrics_list
+
+def parse_result_metrics_per_class_list(fold_result_list):
+    per_class_metrics_list = []
+    for result in fold_result_list:
+        per_class_metrics_list.append(result.result_metrics)
+
+
+def calculate_average_fold_result(fold_result_list):
+    result_metrics_list = parse_result_metrics_list(fold_result_list)
+    [avg_hp, avg_hr, avg_hf] = calculate_average_metrics(result_metrics_list)
+
+
+
+
+def calculate_average_metrics(result_metrics_list):
+    hp = []
+    hr = []
+    hf = []
+
+    for result_metrics in result_metrics_list:
+        hp.append(result_metrics.hp)
+        hr.append(result_metrics.hr)
+        hf.append(result_metrics.hf)
+
+    return [np.mean(hp), np.mean(hr), np.mean(hf)]
+
+def calculate_average_metrics_per_class(fold):
+    pass
