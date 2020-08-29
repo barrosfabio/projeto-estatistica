@@ -2,10 +2,11 @@ from utils.data_utils import *
 from hierarchical_classifier.tree.lcpn_tree import LCPNTree
 from hierarchical_classifier.evaluation.hierarchical_metrics import calculate_hierarchical_metrics
 from hierarchical_classifier.resampling.resampling_algorithm import ResamplingAlgorithm
-from hierarchical_classifier.results.dto.pipeline_result_dto import PipelineResultDTO
+from hierarchical_classifier.results.dto.experiment_result_dto import ExperimentResultDTO
 from hierarchical_classifier.results.dto.result_dto import ResultDTO
 from hierarchical_classifier.results.pipeline_results_framework import PipeleineResultsFramework
 from hierarchical_classifier.constants.resampling_constants import FLAT_RESAMPLING
+from sklearn.metrics import confusion_matrix
 
 
 class HierarchicalClassificationPipeline:
@@ -46,10 +47,10 @@ class HierarchicalClassificationPipeline:
         # 5. Calculate the final/local results
         pipeline_results = PipeleineResultsFramework(self.resampling_strategy, self.resampling_algorithm)
         per_class_metrics = pipeline_results.calculate_perclass_metrics(outputs_test, predicted_classes)
-        pipeline_results.save_to_csv('per_class')
-        pipeline_results.plot_confusion_matrix(outputs_test, predicted_classes)
+        conf_matrix = confusion_matrix(outputs_test, predicted_classes)
 
         [hp, hr, hf] = calculate_hierarchical_metrics(predicted_classes, outputs_test)
+
 
         print('\n-------------------Results Summary-------------------')
         print('Hierarchical Precision: {}'.format(hp))
@@ -57,6 +58,6 @@ class HierarchicalClassificationPipeline:
         print('Hierarchical F-Measure: {}'.format(hf))
         print('Classification completed')
 
-        return PipelineResultDTO(ResultDTO(hp, hr, hf), per_class_metrics, self.resampling_algorithm, self.resampling_strategy, self.fold)
+        return ExperimentResultDTO(ResultDTO(hp, hr, hf), per_class_metrics, conf_matrix, self.resampling_algorithm, self.resampling_strategy, self.fold)
 
 

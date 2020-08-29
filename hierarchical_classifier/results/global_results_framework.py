@@ -10,8 +10,6 @@ class GlobalResultsFramework(ResultsFramework):
     def __init__(self):
         global_config = GlobalConfig.instance()
         global_result_path = global_config.directory_list['global']
-        self.per_class_results = []
-        self.per_parent_metrics = []
         super(GlobalResultsFramework, self).__init__(global_result_path)
 
     def transform_to_csv(self, result_list):
@@ -30,3 +28,17 @@ class GlobalResultsFramework(ResultsFramework):
             result_data_frame = result_data_frame.append(row, ignore_index=True)
 
         write_csv(file_name, result_data_frame)
+
+    def transform_per_class_to_csv(self, per_class_list):
+        path = self.results_path
+
+        if not os.path.isdir(path):
+            os.mkdir(path)
+
+        for per_class in per_class_list:
+            strategy = per_class.resampling_strategy
+            algorithm = per_class.resampling_algorithm
+            data_frame = per_class.avg_result
+            file_name = path + 'per_class_' + strategy + '_' + algorithm
+
+            write_csv(file_name, data_frame)

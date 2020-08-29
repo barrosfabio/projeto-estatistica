@@ -4,7 +4,7 @@ import os
 from hierarchical_classifier.configurations.global_config import GlobalConfig
 
 
-def create_result_directories(result_path, resampling_strategies):
+def create_result_directories(result_path, resampling_strategies, resampling_algorithms):
     timestamp = calendar.timegm(time.gmtime())
     result_path = result_path + '_' + str(timestamp)
 
@@ -14,20 +14,21 @@ def create_result_directories(result_path, resampling_strategies):
                       'global': result_path + '/global',
                       'per_pipeline': result_path + '/per_pipeline',
                       'per_class': result_path + '/per_pipeline/per_class',
-                      'per_parent_node': result_path + '/per_pipeline/per_parent_node',
                       'confusion_matrix': result_path + '/per_pipeline/confusion_matrix',
-                      'pipeline_results': result_path + '/per_pipeline/pipeline_results',
-                      'per_parent_cm': result_path + '/per_pipeline/per_parent_conf_matrix',
                       'distribution': result_path + '/data_distribution'}
 
     # Adding directories for each resampling strategy
     for strategy in resampling_strategies:
         directory_list['per_class_'+strategy] = directory_list['per_class'] + '/' + strategy
-        directory_list['per_parent_node_' + strategy] = directory_list['per_parent_node'] + '/' + strategy
         directory_list['confusion_matrix_' + strategy] = directory_list['confusion_matrix'] + '/' + strategy
-        directory_list['pipeline_results_' + strategy] = directory_list['pipeline_results'] + '/' + strategy
         directory_list['distribution_' + strategy] = directory_list['distribution'] + '/' + strategy
-        directory_list['per_parent_cm_' + strategy] = directory_list['per_parent_cm'] + '/' + strategy
+
+    # Adding directories for each sampling algorithm
+    for strategy in resampling_strategies:
+        for algorithm in resampling_algorithms:
+            directory_list['per_class_' + strategy + '_' + algorithm] = directory_list['per_class_' + strategy] + '/' + algorithm
+            directory_list['confusion_matrix_' + strategy + '_' + algorithm] = directory_list['confusion_matrix_' + strategy] + '/' + algorithm
+            directory_list['distribution_' + strategy + '_' + algorithm] = directory_list['distribution_' + strategy] + '/' + algorithm
 
     for key, value in directory_list.items():
         if not os.path.isdir(value):

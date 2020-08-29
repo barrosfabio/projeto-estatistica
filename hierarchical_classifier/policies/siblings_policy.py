@@ -5,11 +5,30 @@ from hierarchical_classifier.policies.policy import Policy
 CLASS_SEPARATOR = '/'
 
 
+def find_sibling_classes(combinations, data_class, parent):
+    # Classes at the same level
+    same_level_classes = {value for value in combinations if
+                          len(value.split(CLASS_SEPARATOR)) == len(data_class.split(CLASS_SEPARATOR))}
+
+    # Classes at the same level and that share the same parent
+    siblings = {value for value in same_level_classes if
+                find_parent(value) == parent}
+
+    return list(siblings)
+
+
+def find_sibling_child(combinations, sibling):
+    # Tries to find child classes for each sibling. Tests if the value is equal to sibling class + /
+    child_classes = {value for value in combinations if value.find(sibling + CLASS_SEPARATOR) != -1}
+
+    return list(child_classes)
+
+
 class SiblingsPolicy(Policy):
 
     def find_classes_siblings_policy(self, combinations):
         # Find a list of the classes at the same level that share the same parent
-        siblings = self.find_sibling_classes(combinations, self.current_class, self.parent_class)
+        siblings = find_sibling_classes(combinations, self.current_class, self.parent_class)
 
         # Lists to store the positive and the negative classes
         positive_classes = []
@@ -18,7 +37,7 @@ class SiblingsPolicy(Policy):
         # Find the child nodes for each of the sibling classes
         for sibling in siblings:
 
-            child_classes = self.find_sibling_child(combinations, sibling)
+            child_classes = find_sibling_child(combinations, sibling)
             print('Class {} - Child Classes {}'.format(sibling, child_classes))
 
             # Save the child from the current class as positive
@@ -37,20 +56,3 @@ class SiblingsPolicy(Policy):
 
         self.positive_classes = positive_classes
         self.negative_classes = negative_classes
-
-    def find_sibling_classes(self, combinations, data_class, parent):
-        # Classes at the same level
-        same_level_classes = {value for value in combinations if
-                              len(value.split(CLASS_SEPARATOR)) == len(data_class.split(CLASS_SEPARATOR))}
-
-        # Classes at the same level and that share the same parent
-        siblings = {value for value in same_level_classes if
-                    find_parent(value) == parent}
-
-        return list(siblings)
-
-    def find_sibling_child(self, combinations, sibling):
-        # Tries to find child classes for each sibling. Tests if the value is equal to sibling class + /
-        child_classes = {value for value in combinations if value.find(sibling + CLASS_SEPARATOR) != -1}
-
-        return list(child_classes)

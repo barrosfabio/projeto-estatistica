@@ -121,7 +121,7 @@ class PipeleineResultsFramework(ResultsFramework):
 
         return data_frame
 
-    def save_to_csv(self, result_type):
+    def save_to_csv(self, result_type, k_fold):
 
         if result_type == 'per_class':
             data_frame = self.list_to_data_frame(self.per_class_results)
@@ -129,7 +129,10 @@ class PipeleineResultsFramework(ResultsFramework):
             data_frame = self.list_to_data_frame(self.per_parent_metrics)
 
         global_config = GlobalConfig.instance()
-        path = global_config.directory_list[result_type + '_' + self.resample_strategy]
+        path = global_config.directory_list['per_class_' + self.resample_strategy + '_' + self.resample_algorithm] + '/' + 'fold_' + k_fold
+
+        if not os.path.isdir(path):
+            os.mkdir(path)
 
         write_csv(path + result_type +'_metrics_' + self.resample_algorithm, data_frame)
 
@@ -138,10 +141,10 @@ class PipeleineResultsFramework(ResultsFramework):
         global_config = GlobalConfig.instance()
 
         if local_cm is not True:
-            image_path = global_config.directory_list['confusion_matrix_' + self.resample_strategy]
+            image_path = global_config.directory_list['confusion_matrix_' + self.resample_strategy + '_' + self.resample_algorithm]
             image_path = image_path + '/confusion_matrix_'+self.resample_algorithm
         else:
-            image_path = global_config.directory_list['per_parent_cm_' + self.resample_strategy]
+            image_path = global_config.directory_list['confusion_matrix_' + self.resample_strategy + '_' + self.resample_algorithm]
             parent_class = parent_class.replace('/','_')
             image_path = image_path + '/per_parent_matrix_' + self.resample_algorithm + '_' +parent_class
 

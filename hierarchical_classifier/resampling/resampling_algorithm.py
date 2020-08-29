@@ -54,7 +54,7 @@ class ResamplingAlgorithm:
             return AllKNN(sampling_strategy='majority', n_jobs=n_jobs)
 
     # Executes resampling
-    def resample(self, data_frame):
+    def resample(self, data_frame, k_fold):
 
         [input_data, output_data] = slice_data(data_frame)
         before_resample = count_by_class(output_data)
@@ -62,7 +62,7 @@ class ResamplingAlgorithm:
         [input_data, output_data] = self.resampler.fit_resample(input_data, output_data)
         after_resample = count_by_class(output_data)
 
-        self.save_class_distribution(before_resample, after_resample)
+        self.save_class_distribution(before_resample, after_resample, k_fold)
 
         resampled_data_frame = pd.DataFrame(input_data)
         resampled_data_frame['class'] = output_data
@@ -70,10 +70,10 @@ class ResamplingAlgorithm:
         return resampled_data_frame
 
     # Saves the class distribution before and after resampling
-    def save_class_distribution(self, before_resample, after_resample):
+    def save_class_distribution(self, before_resample, after_resample, k_fold):
         global_config = GlobalConfig.instance()
-        data_dist_path = global_config.directory_list['distribution_' + self.resampling_strategy]
-        data_dist_path = data_dist_path + '/' + self.algorithm_name
+        data_dist_path = global_config.directory_list['distribution_' + self.resampling_strategy + '_' + self.algorithm_name]
+        data_dist_path = data_dist_path + '/' + 'fold_' + k_fold
         if not os.path.isdir(data_dist_path):
             os.mkdir(data_dist_path)
 
