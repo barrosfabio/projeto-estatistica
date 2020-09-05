@@ -32,8 +32,8 @@ class HierarchicalClassificationPipeline:
         # 2. From the class_tree, retrieve the data for each node, based on the list of positive and negative classes
         # If FLAT_SAMPLING_STRATEGY is chosen, we will resample the training data here
         if self.resampling_strategy == FLAT_RESAMPLING:
-            resampling_algorithm = ResamplingAlgorithm(self.resampling_strategy, self.resampling_algorithm, 4)
-            self.train_data_frame = resampling_algorithm.resample(self.train_data_frame)
+            resampling_algorithm = ResamplingAlgorithm(self.resampling_strategy, self.resampling_algorithm, 3)
+            self.train_data_frame = resampling_algorithm.resample(self.train_data_frame, self.fold)
 
         tree.retrieve_lcpn_data(class_tree, self.train_data_frame)
 
@@ -58,6 +58,6 @@ class HierarchicalClassificationPipeline:
         print('Hierarchical F-Measure: {}'.format(hf))
         print('Classification completed')
 
-        return ExperimentResultDTO(ResultDTO(hp, hr, hf), per_class_metrics, conf_matrix, self.resampling_algorithm, self.resampling_strategy, self.fold)
+        return ExperimentResultDTO(ResultDTO(hp, hr, hf), per_class_metrics, conf_matrix, self.resampling_strategy, self.resampling_algorithm, self.fold)
 
 

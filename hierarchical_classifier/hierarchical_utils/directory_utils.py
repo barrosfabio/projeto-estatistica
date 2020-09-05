@@ -2,11 +2,15 @@ import calendar
 import time
 import os
 from hierarchical_classifier.configurations.global_config import GlobalConfig
+from hierarchical_classifier.constants.resampling_constants import NONE
 
 
 def create_result_directories(result_path, resampling_strategies, resampling_algorithms):
     timestamp = calendar.timegm(time.gmtime())
     result_path = result_path + '_' + str(timestamp)
+    if not os.path.isdir(result_path):
+        print('Created directory {}'.format(result_path))
+        os.mkdir(result_path)
 
     # List of directories and sub-directories where the results will be saved
     # This is the basic list
@@ -25,10 +29,16 @@ def create_result_directories(result_path, resampling_strategies, resampling_alg
 
     # Adding directories for each sampling algorithm
     for strategy in resampling_strategies:
-        for algorithm in resampling_algorithms:
+        if strategy == NONE:
+            algorithm = 'none'
             directory_list['per_class_' + strategy + '_' + algorithm] = directory_list['per_class_' + strategy] + '/' + algorithm
             directory_list['confusion_matrix_' + strategy + '_' + algorithm] = directory_list['confusion_matrix_' + strategy] + '/' + algorithm
             directory_list['distribution_' + strategy + '_' + algorithm] = directory_list['distribution_' + strategy] + '/' + algorithm
+        else:
+            for algorithm in resampling_algorithms:
+                directory_list['per_class_' + strategy + '_' + algorithm] = directory_list['per_class_' + strategy] + '/' + algorithm
+                directory_list['confusion_matrix_' + strategy + '_' + algorithm] = directory_list['confusion_matrix_' + strategy] + '/' + algorithm
+                directory_list['distribution_' + strategy + '_' + algorithm] = directory_list['distribution_' + strategy] + '/' + algorithm
 
     for key, value in directory_list.items():
         if not os.path.isdir(value):

@@ -14,7 +14,7 @@ def parse_result_metrics_list(fold_result_list):
 def parse_result_metrics_per_class_list(fold_result_list):
     per_class_metrics_list = []
     for result in fold_result_list:
-        per_class_metrics_list.append(result.result_metrics)
+        per_class_metrics_list.append(result.per_class_metrics)
 
     return per_class_metrics_list
 
@@ -67,7 +67,7 @@ def calculate_average_metrics_per_class(list_results, unique_classes):
     final_data_frame = pd.DataFrame()
     for unique in unique_classes:
         row = {'class_name': unique, 'hp': hp_dictionary[unique], 'hr': hr_dictionary[unique], 'hf': hf_dictionary[unique]}
-        final_data_frame.append(row, ignore_index=True)
+        final_data_frame = final_data_frame.append(row, ignore_index=True)
 
     return final_data_frame
 

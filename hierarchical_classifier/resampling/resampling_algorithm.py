@@ -73,7 +73,7 @@ class ResamplingAlgorithm:
     def save_class_distribution(self, before_resample, after_resample, k_fold):
         global_config = GlobalConfig.instance()
         data_dist_path = global_config.directory_list['distribution_' + self.resampling_strategy + '_' + self.algorithm_name]
-        data_dist_path = data_dist_path + '/' + 'fold_' + k_fold
+        data_dist_path = data_dist_path + '/' + 'fold_' + str(k_fold)
         if not os.path.isdir(data_dist_path):
             os.mkdir(data_dist_path)
 
