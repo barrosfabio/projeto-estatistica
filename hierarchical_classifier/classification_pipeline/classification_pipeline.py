@@ -11,16 +11,13 @@ from sklearn.metrics import confusion_matrix
 
 class HierarchicalClassificationPipeline:
 
-    def __init__(self, train_data_frame, test_data_frame, unique_classes, resampling_algorithm, classifier_name, resampling_strategy, fold):
-        self.train_data_frame = train_data_frame
-        self.test_data_frame = test_data_frame
+    def __init__(self, unique_classes, resampling_algorithm, classifier_name, resampling_strategy, fold):
         self.unique_classes = unique_classes
         self.resampling_algorithm = resampling_algorithm
         self.classifier_name = classifier_name
         self.resampling_strategy = resampling_strategy
-        self.fold = fold
 
-    def run(self):
+    def run(self, train_data_frame, test_data_frame, fold):
 
         # Steps to build a hierarchical classifier
 
@@ -33,15 +30,15 @@ class HierarchicalClassificationPipeline:
         # If FLAT_SAMPLING_STRATEGY is chosen, we will resample the training data here
         if self.resampling_strategy == FLAT_RESAMPLING:
             resampling_algorithm = ResamplingAlgorithm(self.resampling_strategy, self.resampling_algorithm, 3)
-            self.train_data_frame = resampling_algorithm.resample(self.train_data_frame, self.fold)
+            train_data_frame = resampling_algorithm.resample(train_data_frame, fold)
 
-        tree.retrieve_lcpn_data(class_tree, self.train_data_frame)
+        tree.retrieve_lcpn_data(class_tree, train_data_frame)
 
         # 3. Train the classifiers
         tree.train_lcpn(class_tree)
 
         # 4. Predict
-        [inputs_test, outputs_test] = slice_data(self.test_data_frame)
+        [inputs_test, outputs_test] = slice_data(test_data_frame)
         predicted_classes = np.array(tree.predict_from_sample_lcpn(class_tree, inputs_test))
 
         # 5. Calculate the final/local results
@@ -58,6 +55,6 @@ class HierarchicalClassificationPipeline:
         print('Hierarchical F-Measure: {}'.format(hf))
         print('Classification completed')
 
-        return ExperimentResultDTO(ResultDTO(hp, hr, hf), per_class_metrics, conf_matrix, self.resampling_strategy, self.resampling_algorithm, self.fold)
+        return ExperimentResultDTO(ResultDTO(hp, hr, hf), per_class_metrics, conf_matrix, self.resampling_strategy, self.resampling_algorithm, fold)
 
 
