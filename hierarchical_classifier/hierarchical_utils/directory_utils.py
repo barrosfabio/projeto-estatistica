@@ -1,13 +1,13 @@
-import calendar
-import time
 import os
 from hierarchical_classifier.configurations.global_config import GlobalConfig
 from hierarchical_classifier.constants.resampling_constants import NONE
-
+from datetime import datetime
 
 def create_result_directories(result_path, resampling_strategies, resampling_algorithms):
-    timestamp = calendar.timegm(time.gmtime())
-    result_path = result_path + '_' + str(timestamp)
+    timestamp = datetime.now()
+    timestamp_string = str(timestamp.day) + '_' + str(timestamp.month) + '_' + str(timestamp.hour) + '_' + str(timestamp.minute)
+
+    result_path = result_path + '_' + timestamp_string
     if not os.path.isdir(result_path):
         print('Created directory {}'.format(result_path))
         os.mkdir(result_path)
