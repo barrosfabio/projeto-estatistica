@@ -27,8 +27,7 @@ def count_per_class(output_data):
 def get_classifier(classifier):
     # Define the classifier
     if classifier == 'rf':
-        return RandomForestClassifier(criterion="gini", min_samples_leaf=10, min_samples_split=20, max_leaf_nodes=None,
-                                      max_depth=10)
+        return RandomForestClassifier(n_estimators=150, criterion='gini', n_jobs=4)
     elif classifier == 'mlp':
         return MLPClassifier(hidden_layer_sizes=120, activation='logistic', verbose=False, early_stopping=True,
                              validation_fraction=0.2)

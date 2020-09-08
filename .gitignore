@@ -1,2 +1,5 @@
+conf_matrix*
+flat_classifier/results/*
+launch.json
 *.idea
 *.pyc
