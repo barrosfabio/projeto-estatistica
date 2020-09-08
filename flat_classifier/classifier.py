@@ -13,7 +13,6 @@ from hierarchical_classifier.evaluation import hierarchical_metrics
 # Options
 from flat_classifier.class_for_array import AllResamples
 
-
 data = '../feature_extraction/result/filtered_covid_canada_plus7.csv'
 classifier = 'rf'
 resample = False
@@ -26,7 +25,7 @@ data_frame = pd.read_csv(data)
 kfold = StratifiedKFold(n_splits=5, shuffle=True)
 
 
-
+""""""
 for res, resampling_algorithm_name in enumerate(resampling_algorithm.resampling_algorithms):
 
     clf = some_functions.get_classifier(classifier)
@@ -74,24 +73,22 @@ for res, resampling_algorithm_name in enumerate(resampling_algorithm.resampling_
         a = ' Results for fold ' + str(kfold_count) + ' '
         print('{:-^50}'.format(a))
 
-        precision, recall, f1 = hierarchical_metrics.calculate_hierarchical_metrics(predicted, outputs_train)
+        # precision, recall, f1 = hierarchical_metrics.calculate_hierarchical_metrics(predicted, outputs_train)
+
+        f1 = f1_score(outputs_test, predicted, average='weighted')
+        recall = recall_score(outputs_test, predicted, average='weighted')  # micro, macro, weighted
+        precision = precision_score(outputs_test, predicted, average='weighted')
 
         resample_metrics.resample[res].create_new_fold_metrics()
         resample_metrics.resample[res].append_metrics_to_fold(kfold_count - 1, recall, f1, precision)
         resample_metrics.resample[res].print_averages_from_fold(kfold_count - 1)
         # ...print_detailed_averages_from_fold(kfold_count-1)
 
-
-
         print('=' * 50)
         print('')
 
         kfold_count += 1
 
-    # print('{:-^50}'.format(' FINAL RESULTS '))
-    # print('Avg Recall: {}'.format(np.mean(recall_array)))
-    # print('Avg F1: {}'.format(np.mean(f1_array)))
-    # print('Avg Precision: {}'.format(np.mean(precision_array)))
 
 resample_metrics.save_to_csv()
 resample_metrics.save_detailed_to_csv()

@@ -114,6 +114,7 @@ class AllResamples:
 
     def save_to_csv(self):
         filename = './results/flat_classifier_' + str(datetime.now().strftime('%H-%M-%S')) + '.csv'
+        print('\nStarted saving detailed data process.')
 
         with open(filename, mode='w') as csv_file:
             fieldnames = ['resample_name', 'fold', 'HR_average', 'HF_average', 'HP_average']
@@ -121,10 +122,11 @@ class AllResamples:
             writer.writeheader()
 
             for res in self.resample:
-                print('Saving data from: ', res.resample_name)
+                print('- Saving data from: {:>15}'.format(str(res.resample_name)), end=' - ')
+                print('Fold: ', end=' ')
 
                 for i in range(len(res.metric)):
-                    print('- Fold: ', i)
+                    print(i, end=' .. ')
 
                     writer.writerow({
                         'resample_name': str(res.resample_name),
@@ -140,10 +142,14 @@ class AllResamples:
                     'HF_average': str(res.get_final_average('HF')),
                     'HP_average': str(res.get_final_average('HP'))})
 
+                print('END')
+
+        print('Simple data save complete!')
         print('Created file -> ', filename)
 
     def save_detailed_to_csv(self):
         filename = './results/flat_detailed_classifier_' + str(datetime.now().strftime('%H-%M-%S')) + '.csv'
+        print('\nStarted saving detailed data process.')
 
         with open(filename, mode='w') as csv_file:
             fieldnames = ['resample_name', 'fold', 'HR_average', 'HR_datailed', 'HF_average',
@@ -153,10 +159,11 @@ class AllResamples:
             writer.writeheader()
 
             for res in self.resample:
-                print('Saving data from: ', res.resample_name)
+                print('- Saving data from: {:>15}'.format(str(res.resample_name)), end=' - ')
+                print('Fold: ', end=' ')
 
                 for i in range(len(res.metric)):
-                    print('- Fold: ', i)
+                    print(i, end=' .. ')
 
                     writer.writerow({
                         'resample_name': str(res.resample_name),
@@ -168,4 +175,7 @@ class AllResamples:
                         'HP_average': str(res.get_metric_average_from_fold('HP', i)),
                         'HP_datailed': str(res.get_detailed_metric_from_fold('HP', i)), })
 
+                print('END')
+
+        print('Detailed data save complete!')
         print('Created file -> ', filename)
