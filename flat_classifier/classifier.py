@@ -11,7 +11,7 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 from flat_classifier import some_functions, resampling_algorithm
 from hierarchical_classifier.evaluation import hierarchical_metrics
 # Options
-from flat_classifier.class_for_array import AllResamples
+from flat_classifier.class_for_array2 import AllResamples
 
 data = './feature_extraction/result/filtered_covid_canada_plus7.csv'
 classifier = 'rf'
@@ -21,33 +21,11 @@ f1_array = []
 precision_array = []
 recall_array = []
 
-"""
-test_resample = [Resample('SMOTE'), Resample('TESTE')]
-test_resample[0].create_new_fold_metrics()
-test_resample[0].append_metrics_to_fold(0, 2, 4, 6)
-test_resample[0].append_metrics_to_fold(0, 4, 4, 6)
-test_resample[0].append_metrics_to_fold(0, 2, 2, 6)
 
-test_resample[0].print_averages_from_fold(0)
-
-print(test_resample[0].print_detailed_averages_from_fold(0))
-"""
 
 resample_metrics = AllResamples()
 resample_metrics.create_new_resample('SVM')
-# resample_metrics.resample[0].create_new_fold_metrics()
-# resample_metrics.resample[0].append_metrics_to_fold(0, 4, 5, 7)
-# resample_metrics.resample[0].append_metrics_to_fold(0, 6, 5, 7)
-# resample_metrics.resample[0].append_metrics_to_fold(0, 6, 4, 7)
 
-# resample_metrics.resample[1].create_new_fold_metrics()
-# resample_metrics.resample[1].append_metrics_to_fold(0, 3, 5, 7)
-# resample_metrics.resample[1].append_metrics_to_fold(0, 4, 5, 8)
-# resample_metrics.resample[1].append_metrics_to_fold(0, 5, 5, 8)
-
-
-# resample_metrics.save_to_csv()
-# resample_metrics.save_detailed_to_csv()
 
 # Load data
 data_frame = pd.read_csv(data)
