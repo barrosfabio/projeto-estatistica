@@ -4,7 +4,7 @@ from imblearn.over_sampling import SMOTE, BorderlineSMOTE, RandomOverSampler, AD
 from imblearn.under_sampling import RandomUnderSampler, NeighbourhoodCleaningRule, TomekLinks, EditedNearestNeighbours, \
     NearMiss, AllKNN
 
-resampling_algorithms = [None, RANDOM_OVERSAMPLER, SMOTE_RESAMPLE, BORDERLINE_SMOTE, KMEANS_SMOTE, SVM_SMOTE, ADASYN_RESAMPLER, SMOTE_ENN, SMOTE_TOMEK]
+resampling_algorithms = [None, RANDOM_OVERSAMPLER, SMOTE_RESAMPLE, BORDERLINE_SMOTE, ADASYN_RESAMPLER, SMOTE_ENN, SMOTE_TOMEK]
 resampling_strategies = [NONE, FLAT_RESAMPLING, HIERARCHICAL_RESAMPLING]
 
 # Resampling strategies

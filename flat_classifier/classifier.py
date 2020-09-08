@@ -9,11 +9,11 @@ from sklearn.model_selection import KFold, StratifiedKFold
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
 from flat_classifier import some_functions, resampling_algorithm
-
+from hierarchical_classifier.evaluation import hierarchical_metrics
 # Options
 from flat_classifier.class_for_array import AllResamples
 
-data = './feature_extraction/result/filtered_covid_canada_rydles_plus7.csv'
+data = './feature_extraction/result/filtered_covid_canada_plus7.csv'
 classifier = 'rf'
 resample = False
 accuracy_array = []
@@ -35,19 +35,19 @@ print(test_resample[0].print_detailed_averages_from_fold(0))
 
 resample_metrics = AllResamples()
 resample_metrics.create_new_resample('SVM')
-resample_metrics.resample[0].create_new_fold_metrics()
-resample_metrics.resample[0].append_metrics_to_fold(0, 4, 5, 7)
-resample_metrics.resample[0].append_metrics_to_fold(0, 6, 5, 7)
-resample_metrics.resample[0].append_metrics_to_fold(0, 6, 4, 7)
+# resample_metrics.resample[0].create_new_fold_metrics()
+# resample_metrics.resample[0].append_metrics_to_fold(0, 4, 5, 7)
+# resample_metrics.resample[0].append_metrics_to_fold(0, 6, 5, 7)
+# resample_metrics.resample[0].append_metrics_to_fold(0, 6, 4, 7)
 
-resample_metrics.resample[1].create_new_fold_metrics()
-resample_metrics.resample[1].append_metrics_to_fold(0, 3, 5, 7)
-resample_metrics.resample[1].append_metrics_to_fold(0, 4, 5, 8)
-resample_metrics.resample[1].append_metrics_to_fold(0, 5, 5, 8)
+# resample_metrics.resample[1].create_new_fold_metrics()
+# resample_metrics.resample[1].append_metrics_to_fold(0, 3, 5, 7)
+# resample_metrics.resample[1].append_metrics_to_fold(0, 4, 5, 8)
+# resample_metrics.resample[1].append_metrics_to_fold(0, 5, 5, 8)
 
 
-resample_metrics.save_to_csv()
-resample_metrics.save_detailed_to_csv()
+# resample_metrics.save_to_csv()
+# resample_metrics.save_detailed_to_csv()
 
 # Load data
 data_frame = pd.read_csv(data)
@@ -103,24 +103,29 @@ for resampling_algorithm_name in resampling_algorithm.resampling_algorithms:
         a = ' Results for fold ' + str(kfold_count) + ' '
         print('{:-^50}'.format(a))
 
-        f1 = f1_score(outputs_test, predicted, average='micro')
-        recall = recall_score(outputs_test, predicted, average='micro')  # micro, macro, weighted
-        precision = precision_score(outputs_test, predicted, average='micro')
+        precision, recall, f1  = hierarchical_metrics.calculate_hierarchical_metrics(predicted, outputs_train)
 
-        recall_array.append(recall)
-        f1_array.append(f1)
-        precision_array.append(precision)
+        resample_metrics.resample[1].create_new_fold_metrics()
+        resample_metrics.resample[1].append_metrics_to_fold(kfold_count-1, recall, f1, precision)
+        # resample_metrics.resample[1].print_detailed_averages_from_fold(kfold_count-1)
+        resample_metrics.resample[1].print_averages_from_fold(kfold_count-1)
 
-        print('Recall MICRO: ', str(recall))
-        print('F1 Score: ' + str(f1))
-        print('Precision MICRO: ', str(precision))
+        # recall_array.append(recall)
+        # f1_array.append(f1)
+        # precision_array.append(precision)
+
+        # print('Recall MICRO: ', str(recall))
+        # print('F1 Score: ' + str(f1))
+        # print('Precision MICRO: ', str(precision))
 
         print('=' * 50)
         print('')
 
         kfold_count += 1
 
-    print('{:-^50}'.format(' FINAL RESULTS '))
-    print('Avg Recall: {}'.format(np.mean(recall_array)))
-    print('Avg F1: {}'.format(np.mean(f1_array)))
-    print('Avg Precision: {}'.format(np.mean(precision_array)))
+    # print('{:-^50}'.format(' FINAL RESULTS '))
+    # print('Avg Recall: {}'.format(np.mean(recall_array)))
+    # print('Avg F1: {}'.format(np.mean(f1_array)))
+    # print('Avg Precision: {}'.format(np.mean(precision_array)))
+resample_metrics.save_to_csv()
+resample_metrics.save_detailed_to_csv()
