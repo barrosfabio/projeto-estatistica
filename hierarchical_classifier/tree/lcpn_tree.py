@@ -2,12 +2,11 @@ from hierarchical_classifier.tree.generic_tree import Tree
 from utils.data_utils import slice_data
 from hierarchical_classifier.tree.data import Data
 from hierarchical_classifier.classification.classification_algorithm import ClassificationAlgorithm
-import numpy as np
 from hierarchical_classifier.constants.resampling_constants import HIERARCHICAL_RESAMPLING
 from hierarchical_classifier.resampling.resampling_algorithm import ResamplingAlgorithm
-
-
-CLASS_SEPARATOR = '/'
+from hierarchical_classifier.configurations.global_config import GlobalConfig
+from hierarchical_classifier.constants.utils_constants import CLASS_SEPARATOR
+import numpy as np
 
 
 def relabel_outputs_lcpn(output_data, data_class):
@@ -46,7 +45,10 @@ class LCPNTree(Tree):
             if self.resampling_strategy == HIERARCHICAL_RESAMPLING:
                 unique_classes = np.unique(positive_classes_data.iloc[:,-1])
                 if len(unique_classes) > 1:
-                    resampling_algorithm = ResamplingAlgorithm(self.resampling_strategy, self.resampling_algorithm, 4, root_node.class_name)
+                    global_config = GlobalConfig.instance()
+                    k_neighbors = global_config.k_neighbors
+                    resampling_algorithm = ResamplingAlgorithm(self.resampling_strategy, self.resampling_algorithm,
+                                                               k_neighbors, root_node.class_name)
                     positive_classes_data = resampling_algorithm.resample(positive_classes_data, self.fold)
 
             # Slice data in inputs and outputs

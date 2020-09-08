@@ -2,11 +2,11 @@ from imblearn.combine import SMOTETomek, SMOTEENN
 from imblearn.over_sampling import SMOTE, BorderlineSMOTE, RandomOverSampler, ADASYN, KMeansSMOTE, SVMSMOTE
 from imblearn.under_sampling import RandomUnderSampler, NeighbourhoodCleaningRule, TomekLinks, EditedNearestNeighbours, NearMiss, AllKNN
 from utils.data_utils import slice_data
-import pandas as pd
 from hierarchical_classifier.constants.resampling_constants import *
 from hierarchical_classifier.configurations.global_config import GlobalConfig
 from utils.data_utils import count_by_class
 from utils.results_utils import write_csv
+import pandas as pd
 import os
 
 
@@ -31,7 +31,7 @@ class ResamplingAlgorithm:
         elif algorithm_name == SMOTE_TOMEK:
             return SMOTETomek(sampling_strategy=sampling_strategy, random_state=42, n_jobs=n_jobs, smote=smote)
         elif algorithm_name == BORDERLINE_SMOTE:
-            return BorderlineSMOTE(sampling_strategy=sampling_strategy, random_state=42, n_jobs=n_jobs, smote=smote)
+            return BorderlineSMOTE(sampling_strategy=sampling_strategy, random_state=42, n_jobs=n_jobs, k_neighbors=k_neighbors)
         elif algorithm_name == ADASYN_RESAMPLER:
             return ADASYN(sampling_strategy=sampling_strategy, random_state=42, n_jobs=n_jobs, n_neighbors=k_neighbors)
         elif algorithm_name == RANDOM_OVERSAMPLER:
