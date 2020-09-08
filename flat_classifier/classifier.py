@@ -104,10 +104,6 @@ for res, resampling_algorithm_name in enumerate(resampling_algorithm.resampling_
     plot_confusion_matrix(conf_matrix, classes=classes, image_name=f'./conf_matrix_flat_{resampling_algorithm_name}.png',
                           normalize=False,
                           title='Confusion Matrix')
-    # print('{:-^50}'.format(' FINAL RESULTS '))
-    # print('Avg Recall: {}'.format(np.mean(recall_array)))
-    # print('Avg F1: {}'.format(np.mean(f1_array)))
-    # print('Avg Precision: {}'.format(np.mean(precision_array)))
 
 resample_metrics.save_to_csv()
 resample_metrics.save_detailed_to_csv()
