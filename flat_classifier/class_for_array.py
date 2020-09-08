@@ -2,12 +2,13 @@ import numpy as np
 import csv
 from datetime import datetime
 
+
 # For each folder
 class Metrics:
     def __init__(self):
-        self.accuracy_array = []
-        self.precision_array = []
-        self.recall_array = []
+        self.HF = []
+        self.HP = []
+        self.HR = []
 
 
 # For each Resample Method
@@ -20,92 +21,102 @@ class Resample:
     def create_new_fold_metrics(self):
         self.metric.append(Metrics())
 
-    def append_metrics_to_fold(self, fold, recall, accuracy, precision):
-        self.metric[fold].recall_array.append(recall)
-        self.metric[fold].accuracy_array.append(accuracy)
-        self.metric[fold].precision_array.append(precision)
+    def append_metrics_to_fold(self, fold, hr, hf, hp):
+        self.metric[fold].HR.append(hr)
+        self.metric[fold].HF.append(hf)
+        self.metric[fold].HP.append(hp)
 
-    def get_recall_average_from_fold(self, fold):
-        return np.mean(self.metric[fold].recall_array)
+    # GET FROM FOLD
+    def get_metric_average_from_fold(self, metric, fold):
+        if metric == 'HR':
+            return np.mean(self.metric[fold].HR)
+        elif metric == 'HF':
+            return np.mean(self.metric[fold].HF)
+        elif metric == 'HP':
+            return np.mean(self.metric[fold].HP)
 
-    def get_detailed_recall_from_fold(self, fold):
+    # GET DETAILED FROM FOLD
+    def get_detailed_metric_from_fold(self, metric, fold):
         string = ''
-        for value in self.metric[fold].recall_array:
-            string += ', ' + str(value)
 
-        return string
+        if metric == 'HR':
+            for value in self.metric[fold].HR:
+                string += ', ' + str(value)
+            return string
 
-    def get_detailed_accuracy_from_fold(self, fold):
-        string = ''
-        for value in self.metric[fold].accuracy_array:
-            string += ', ' + str(value)
+        elif metric == 'HF':
+            for value in self.metric[fold].HF:
+                string += ', ' + str(value)
+            return string
 
-        return string
+        elif metric == 'HP':
+            for value in self.metric[fold].HP:
+                string += ', ' + str(value)
+            return string
 
-    def get_detailed_precision_from_fold(self, fold):
-        string = ''
-        for value in self.metric[fold].precision_array:
-            string += ', ' + str(value)
+    # FINAL AVERAGES
+    def get_final_average(self, metric):
+        final = []
 
-        return string
+        if metric == 'HR':
+            for met in self.metric:
+                final += met.HR
 
-    def get_accuracy_average_from_fold(self, fold):
-        return np.mean(self.metric[fold].accuracy_array)
+        elif metric == 'HF':
+            for met in self.metric:
+                final += met.HF
 
-    def get_precision_average_from_fold(self, fold):
-        return np.mean(self.metric[fold].precision_array)
+        elif metric == 'HP':
+            for met in self.metric:
+                final += met.HP
 
+        return np.mean(final)
+
+    # PRINT
     def print_averages_from_fold(self, fold):
-        print('{:>50}'.format(str(f'Avg Recall: {self.get_recall_average_from_fold(fold):.5f}')))
-        print('{:>50}'.format(str(f'Avg Accuracy: {self.get_accuracy_average_from_fold(fold):.5f}')))
-        print('{:>50}'.format(str(f'Avg Precision: {self.get_precision_average_from_fold(fold):.5f}')))
+        print('{:>50}'.format(str(f'Avg HR: {self.get_metric_average_from_fold("HR", fold):.5f}')))
+        print('{:>50}'.format(str(f'Avg HF: {self.get_metric_average_from_fold("HF", fold):.5f}')))
+        print('{:>50}'.format(str(f'Avg HP: {self.get_metric_average_from_fold("HP", fold):.5f}')))
 
-    def print_recall_from_fold(self, fold):
-        print('Recall values from fold {}: '.format(fold))
+    def print_detailed_averages_from_fold(self, fold):
+        # HR
+        print('-' * 50)
+        print('HR values from fold {}: '.format(fold))
         for rc in self.metric[fold].recall_array:
             print(rc, end=' -> ')
         print('END')
+        print('{:>50}'.format(str(f'Avg HR: {np.mean(self.metric[fold].HR):.5f}')))
 
-    def print_accuracy_from_fold(self, fold):
-        print('Accuracy values from fold {}: '.format(fold))
+        # HF
+        print('-' * 50)
+        print('HF values from fold {}: '.format(fold))
         for ac in self.metric[fold].accuracy_array:
             print(ac, end=' -> ')
         print('END')
+        print('{:>50}'.format(str(f'Avg HF: {np.mean(self.metric[fold].HF):.5f}')))
 
-    def print_precision_from_fold(self, fold):
-        print('Precision values from fold {}: '.format(fold))
+        # HP
+        print('-' * 50)
+        print('HP values from fold {}: '.format(fold))
         for pr in self.metric[fold].precision_array:
             print(pr, end=' -> ')
         print('END')
-
-    def print_detailed_averages_from_fold(self, fold):
-        print('-' * 50)
-
-        self.print_recall_from_fold(fold)
-        print('{:>50}'.format(str(f'Avg Recall: {np.mean(self.metric[fold].recall_array):.5f}')))
-
-        print('-' * 50)
-        self.print_accuracy_from_fold(fold)
-        print('{:>50}'.format(str(f'Avg Accuracy: {np.mean(self.metric[fold].accuracy_array):.5f}')))
-
-        print('-' * 50)
-        self.print_precision_from_fold(fold)
-        print('{:>50}'.format(str(f'Avg Precision: {np.mean(self.metric[fold].precision_array):.5f}')))
+        print('{:>50}'.format(str(f'Avg HP: {np.mean(self.metric[fold].HP):.5f}')))
 
 
 class AllResamples:
 
     def __init__(self):
-        self.resample = [Resample('TESTE')]
+        self.resample = []
 
     def create_new_resample(self, resample_name):
         self.resample.append(Resample(resample_name))
 
     def save_to_csv(self):
-        filename = './flat_classifier_' + str(datetime.now().strftime('%M%S')) + '.csv'
+        filename = './results/flat_classifier_' + str(datetime.now().strftime('%H-%M-%S')) + '.csv'
 
         with open(filename, mode='w') as csv_file:
-            fieldnames = ['resample_name', 'fold' ,'recall_average', 'accuracy_average', 'precision_average']
+            fieldnames = ['resample_name', 'fold', 'HR_average', 'HF_average', 'HP_average']
             writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
             writer.writeheader()
 
@@ -113,21 +124,30 @@ class AllResamples:
                 print('Saving data from: ', res.resample_name)
 
                 for i in range(len(res.metric)):
-                    print('- Fold: ', res.metric[i])
+                    print('- Fold: ', i)
 
                     writer.writerow({
                         'resample_name': str(res.resample_name),
                         'fold': str(i),
-                        'recall_average': str(res.get_recall_average_from_fold(i)),
-                        'accuracy_average': str(res.get_recall_average_from_fold(i)),
-                        'precision_average': str(res.get_recall_average_from_fold(i))})
+                        'HR_average': str(res.get_metric_average_from_fold('HR', i)),
+                        'HF_average': str(res.get_metric_average_from_fold('HF', i)),
+                        'HP_average': str(res.get_metric_average_from_fold('HP', i))})
+
+                writer.writerow({
+                    'resample_name': str(res.resample_name),
+                    'fold': str('TOTAL AVERAGE'),
+                    'HR_average': str(res.get_final_average('HR')),
+                    'HF_average': str(res.get_final_average('HF')),
+                    'HP_average': str(res.get_final_average('HP'))})
+
+        print('Created file -> ', filename)
 
     def save_detailed_to_csv(self):
-        filename = './flat_detailed_lassifier_' + str(datetime.now().strftime('%M%S')) + '.csv'
+        filename = './results/flat_detailed_classifier_' + str(datetime.now().strftime('%H-%M-%S')) + '.csv'
 
         with open(filename, mode='w') as csv_file:
-            fieldnames = ['resample_name', 'fold', 'recall_average', 'recall_datailed', 'accuracy_average',
-                          'accuracy_datailed', 'precision_average', 'precision_datailed']
+            fieldnames = ['resample_name', 'fold', 'HR_average', 'HR_datailed', 'HF_average',
+                          'HF_datailed', 'HP_average', 'HP_datailed']
 
             writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
             writer.writeheader()
@@ -136,14 +156,16 @@ class AllResamples:
                 print('Saving data from: ', res.resample_name)
 
                 for i in range(len(res.metric)):
-                    print('- Fold: ', res.metric[i])
+                    print('- Fold: ', i)
 
                     writer.writerow({
                         'resample_name': str(res.resample_name),
                         'fold': str(i),
-                        'recall_average': str(res.get_recall_average_from_fold(i)),
-                        'recall_datailed': str(res.get_detailed_recall_from_fold(i)),
-                        'accuracy_average': str(res.get_recall_average_from_fold(i)),
-                        'accuracy_datailed': str(res.get_detailed_accuracy_from_fold(i)),
-                        'precision_average': str(res.get_recall_average_from_fold(i)),
-                        'precision_datailed': str(res.get_detailed_precision_from_fold(i)),})
+                        'HR_average': str(res.get_metric_average_from_fold('HR', i)),
+                        'HR_datailed': str(res.get_detailed_metric_from_fold('HR', i)),
+                        'HF_average': str(res.get_metric_average_from_fold('HF', i)),
+                        'HF_datailed': str(res.get_detailed_metric_from_fold('HF', i)),
+                        'HP_average': str(res.get_metric_average_from_fold('HP', i)),
+                        'HP_datailed': str(res.get_detailed_metric_from_fold('HP', i)), })
+
+        print('Created file -> ', filename)
