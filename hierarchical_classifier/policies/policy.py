@@ -1,7 +1,6 @@
 from utils.class_relationship_utils import compare_child_length
+from hierarchical_classifier.constants.utils_constants import CLASS_SEPARATOR
 import numpy as np
-
-CLASS_SEPARATOR = '/'
 
 
 class Policy:

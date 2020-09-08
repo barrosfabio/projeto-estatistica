@@ -6,6 +6,7 @@ from hierarchical_classifier.results.dto.experiment_result_dto import Experiment
 from hierarchical_classifier.results.dto.result_dto import ResultDTO
 from hierarchical_classifier.results.pipeline_results_framework import PipeleineResultsFramework
 from hierarchical_classifier.constants.resampling_constants import FLAT_RESAMPLING
+from hierarchical_classifier.configurations.global_config import GlobalConfig
 from sklearn.metrics import confusion_matrix
 
 
@@ -16,8 +17,11 @@ class HierarchicalClassificationPipeline:
         self.resampling_algorithm = resampling_algorithm
         self.classifier_name = classifier_name
         self.resampling_strategy = resampling_strategy
+        global_config = GlobalConfig.instance()
+        self.k_neighbors = global_config.k_neighbors
 
     def run(self, train_data_frame, test_data_frame, fold):
+
 
         # Steps to build a hierarchical classifier
 
@@ -29,7 +33,7 @@ class HierarchicalClassificationPipeline:
         # 2. From the class_tree, retrieve the data for each node, based on the list of positive and negative classes
         # If FLAT_SAMPLING_STRATEGY is chosen, we will resample the training data here
         if self.resampling_strategy == FLAT_RESAMPLING:
-            resampling_algorithm = ResamplingAlgorithm(self.resampling_strategy, self.resampling_algorithm, 3)
+            resampling_algorithm = ResamplingAlgorithm(self.resampling_strategy, self.resampling_algorithm, self.k_neighbors)
             train_data_frame = resampling_algorithm.resample(train_data_frame, fold)
 
         tree.retrieve_lcpn_data(class_tree, train_data_frame)

@@ -1,8 +1,7 @@
 import numpy as np
 from utils.class_relationship_utils import find_parent
 from hierarchical_classifier.policies.policy import Policy
-
-CLASS_SEPARATOR = '/'
+from hierarchical_classifier.constants.utils_constants import CLASS_SEPARATOR
 
 
 def find_sibling_classes(combinations, data_class, parent):
