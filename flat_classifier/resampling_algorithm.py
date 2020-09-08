@@ -4,7 +4,7 @@ from imblearn.over_sampling import SMOTE, BorderlineSMOTE, RandomOverSampler, AD
 from imblearn.under_sampling import RandomUnderSampler, NeighbourhoodCleaningRule, TomekLinks, EditedNearestNeighbours, \
     NearMiss, AllKNN
 
-resampling_algorithms = [SMOTE_RESAMPLE, SMOTE_ENN, SMOTE_TOMEK, RANDOM_OVERSAMPLER, RANDOM_UNDERSAMPLER, NEAR_MISS]
+resampling_algorithms = [None, RANDOM_OVERSAMPLER, SMOTE_RESAMPLE, BORDERLINE_SMOTE, KMEANS_SMOTE, SVM_SMOTE, ADASYN_RESAMPLER, SMOTE_ENN, SMOTE_TOMEK]
 resampling_strategies = [NONE, FLAT_RESAMPLING, HIERARCHICAL_RESAMPLING]
 
 # Resampling strategies
@@ -44,7 +44,7 @@ def instantiate_resampler(self, algorithm_name, k_neighbors):
     elif algorithm_name == SMOTE_TOMEK:
         return SMOTETomek(sampling_strategy=sampling_strategy, random_state=42, n_jobs=n_jobs, smote=smote)
     elif algorithm_name == BORDERLINE_SMOTE:
-        return BorderlineSMOTE(sampling_strategy=sampling_strategy, random_state=42, n_jobs=n_jobs, smote=smote)
+        return BorderlineSMOTE(sampling_strategy=sampling_strategy, random_state=42, n_jobs=n_jobs)
     elif algorithm_name == ADASYN_RESAMPLER:
         return ADASYN(sampling_strategy=sampling_strategy, random_state=42, n_jobs=n_jobs, n_neighbors=k_neighbors)
     elif algorithm_name == RANDOM_OVERSAMPLER:
