@@ -38,6 +38,8 @@ def plot_confusion_matrix(cm, classes, image_name,
     plt.figure(figsize=figsize)
     if normalize:
         cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+    else:
+        cm = cm.astype('int32')
 
     plt.imshow(cm, interpolation='nearest', cmap=cmap)
     plt.title(title)
