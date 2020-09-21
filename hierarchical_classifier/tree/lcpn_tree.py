@@ -7,6 +7,7 @@ from hierarchical_classifier.resampling.resampling_algorithm import ResamplingAl
 from hierarchical_classifier.configurations.global_config import GlobalConfig
 from hierarchical_classifier.constants.utils_constants import CLASS_SEPARATOR
 import numpy as np
+import pandas as pd
 
 
 def relabel_outputs_lcpn(output_data, data_class):
@@ -22,10 +23,20 @@ def relabel_outputs_lcpn(output_data, data_class):
 
     return np.asarray(relabeled_outputs)
 
+def relabel_outputs_lcn(data_frame, data_class):
+    unique_classes = np.unique(data_frame['class'])
+    data_frame['class'] = data_frame['class'].replace(unique_classes, data_class)
+    # for index, data in data_frame.iterrows():
+    #     data['class'] = data_class
+    #     data_frame.loc[index] = data
+
+
+    return data_frame
+
 
 class LCPNTree(Tree):
 
-    def retrieve_lcpn_data(self, root_node, data_frame):
+    def retrieve_data(self, root_node, data_frame):
         print('Currently retrieving data for class: {}'.format(root_node.class_name))
 
         # If the current node doesn't have child, it is a leaf node
@@ -54,6 +65,10 @@ class LCPNTree(Tree):
             # Slice data in inputs and outputs
             [input_data, output_data] = slice_data(positive_classes_data)
 
+
+            # Relabel positive classes
+            positive_classes_data = relabel_outputs_lcn(positive_classes_data, root_node.class_name)
+
             # Relabel the outputs to the child classes
             output_data = relabel_outputs_lcpn(output_data, root_node.class_name)
 
@@ -67,9 +82,9 @@ class LCPNTree(Tree):
             # Iterate over the current node child to call recursively for all of them
             for i in range(children):
                 print('Child is {}'.format(root_node.child[i].class_name))
-                self.retrieve_lcpn_data(root_node.child[i], data_frame)
+                self.retrieve_data(root_node.child[i], data_frame)
 
-    def train_lcpn(self, root_node):
+    def train_hierarchical(self, root_node):
 
         # Testing if the node is leaf
         if len(root_node.child) == 0:
@@ -96,9 +111,9 @@ class LCPNTree(Tree):
             # Iterate over the current node child to call recursively for all of them
             for i in range(children):
                 print('Child is {}'.format(root_node.child[i].class_name))
-                self.train_lcpn(root_node.child[i])
+                self.train_hierarchical(root_node.child[i])
 
-    def predict_lcpn(self, root_node, sample):
+    def predict_hierarchical(self, root_node, sample):
 
         # Testing if the node is leaf
         if len(root_node.child) == 0:
@@ -121,14 +136,14 @@ class LCPNTree(Tree):
                 # When the correct child is found, we will continue calling the recursion
                 if child_class == predicted_class:
                     print('Child predicted is {}'.format(child_class))
-                    return self.predict_lcpn(root_node.child[i], sample)
+                    return self.predict_hierarchical(root_node.child[i], sample)
 
-    def predict_from_sample_lcpn(self, root_node, test_inputs):
+    def predict_from_sample(self, root_node, test_inputs):
         predicted_classes = []
         i = 0
 
         for sample in test_inputs:
-            predicted_class = self.predict_lcpn(root_node, sample)
+            predicted_class = self.predict_hierarchical(root_node, sample)
 
             predicted_classes.append(predicted_class)
             print('Record being predicted {}/{}'.format(i, len(test_inputs)))

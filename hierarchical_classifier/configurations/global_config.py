@@ -20,3 +20,6 @@ class GlobalConfig():
 
     def set_kfold(self, kfold):
         self.kfold = kfold
+
+    def set_local_classifier(self, local_classifier):
+        self.local_classifier = local_classifier

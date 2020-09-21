@@ -1,8 +1,17 @@
 from copy import copy, deepcopy
 from hierarchical_classifier.tree.node import Node
 from hierarchical_classifier.policies.siblings_policy import SiblingsPolicy
-from utils.tree_utils import get_possible_classes, find_parent
+from utils.tree_utils import get_possible_classes
+from hierarchical_classifier.hierarchical_utils.class_relationship_utils import find_parent
 
+def find_node(root, node_class):
+    if root.class_name == node_class:
+        return root
+    else:
+        children = len(root.child)
+
+        for i in range(children):
+            find_node(root.child[i], node_class)
 
 class Tree():
 
@@ -11,16 +20,6 @@ class Tree():
         self.classification_algorithm = classification_algorithm
         self.resampling_strategy = resampling_strategy
         self.resampling_algorithm = resampling_algorithm
-
-    def find_node(self, root, node_class):
-
-        if root.class_name == node_class:
-            return root
-        else:
-            children = len(root.child)
-
-            for i in range(children):
-                self.find_node(root.child[i], node_class)
 
     def insert_node(self, root, parent, data_class_relationship,  node_class):
         print('Node class: ' + node_class)

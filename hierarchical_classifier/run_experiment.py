@@ -1,6 +1,7 @@
 from hierarchical_classifier.constants.resampling_constants import *
 from hierarchical_classifier.results.global_results_framework import GlobalResultsFramework
 from hierarchical_classifier.hierarchical_utils.directory_utils import create_result_directories
+from hierarchical_classifier.constants.utils_constants import LCPN_CLASSIFIER, LCN_CLASSIFIER
 from hierarchical_classifier.protocol.experimental_protocol import ExperimentalProtocol
 from hierarchical_classifier.configurations.global_config import GlobalConfig
 from utils.data_utils import slice_data
@@ -11,6 +12,7 @@ path = 'C:/Users/Fabio Barros/Git/projeto-estatistica/feature_extraction/result/
 #path = 'C:/Users/Fabio Barros/Git/projeto-estatistica/feature_extraction/result/covid_feature_matrix_train.csv'
 result_path = 'C:/Users/Fabio Barros/Git/projeto-estatistica/hierarchical_classifier/final_results/experiment_results'
 classifier_name = 'rf'
+local_classifier_type = LCPN_CLASSIFIER
 folds = 5
 k_neighbors = 5
 
@@ -18,6 +20,7 @@ k_neighbors = 5
 global_config = GlobalConfig.instance()
 global_config.set_kneighbors(k_neighbors)
 global_config.set_kfold(folds)
+global_config.set_local_classifier(LCPN_CLASSIFIER)
 
 results_list = []
 results_per_class_list = []

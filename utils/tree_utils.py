@@ -1,5 +1,4 @@
 import numpy as np
-from utils.class_relationship_utils import find_parent
 
 CLASS_SEPARATOR = '/'
 

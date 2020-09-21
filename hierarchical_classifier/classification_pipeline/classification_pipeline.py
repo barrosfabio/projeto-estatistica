@@ -1,5 +1,6 @@
 from utils.data_utils import *
 from hierarchical_classifier.tree.lcpn_tree import LCPNTree
+from hierarchical_classifier.tree.lcn_tree import LCNTree
 from hierarchical_classifier.evaluation.hierarchical_metrics import calculate_hierarchical_metrics
 from hierarchical_classifier.evaluation.flat_metrics import calculate_flat_metrics
 from hierarchical_classifier.resampling.resampling_algorithm import ResamplingAlgorithm
@@ -7,6 +8,7 @@ from hierarchical_classifier.results.dto.experiment_result_dto import Experiment
 from hierarchical_classifier.results.dto.result_dto import ResultDTO
 from hierarchical_classifier.results.pipeline_results_framework import PipeleineResultsFramework
 from hierarchical_classifier.constants.resampling_constants import FLAT_RESAMPLING
+from hierarchical_classifier.constants.utils_constants import LCPN_CLASSIFIER, LCN_CLASSIFIER
 from hierarchical_classifier.configurations.global_config import GlobalConfig
 from sklearn.metrics import confusion_matrix
 
@@ -20,6 +22,7 @@ class HierarchicalClassificationPipeline:
         self.resampling_strategy = resampling_strategy
         global_config = GlobalConfig.instance()
         self.k_neighbors = global_config.k_neighbors
+        self.local_classifier = global_config.local_classifier
 
     def run(self, train_data_frame, test_data_frame, fold):
 
@@ -28,7 +31,15 @@ class HierarchicalClassificationPipeline:
 
         # 1. From the outputs array, use it to build the class_tree and to get the positive and negative classes according to
         # a policy
-        tree = LCPNTree(self.unique_classes, self.classifier_name, self.resampling_strategy, self.resampling_algorithm)
+        if(self.local_classifier == LCPN_CLASSIFIER ):
+            print('Using a LCPN Classifier')
+            tree = LCPNTree(self.unique_classes, self.classifier_name, self.resampling_strategy,
+                            self.resampling_algorithm)
+        elif(self.local_classifier == LCN_CLASSIFIER):
+            print('Using a LCN Classifier')
+            tree = LCNTree(self.unique_classes, self.classifier_name, self.resampling_strategy,
+                            self.resampling_algorithm)
+
         class_tree = tree.build_tree()
 
         # 2. From the class_tree, retrieve the data for each node, based on the list of positive and negative classes
@@ -37,14 +48,14 @@ class HierarchicalClassificationPipeline:
             resampling_algorithm = ResamplingAlgorithm(self.resampling_strategy, self.resampling_algorithm, self.k_neighbors)
             train_data_frame = resampling_algorithm.resample(train_data_frame, fold)
 
-        tree.retrieve_lcpn_data(class_tree, train_data_frame)
+        tree.retrieve_data(class_tree, train_data_frame)
 
         # 3. Train the classifiers
-        tree.train_lcpn(class_tree)
+        tree.train_hierarchical(class_tree)
 
         # 4. Predict
         [inputs_test, outputs_test] = slice_data(test_data_frame)
-        predicted_classes = np.array(tree.predict_from_sample_lcpn(class_tree, inputs_test))
+        predicted_classes = np.array(tree.predict_from_sample(class_tree, inputs_test))
 
         # 5. Calculate the final/local results
         pipeline_results = PipeleineResultsFramework(self.resampling_strategy, self.resampling_algorithm)

@@ -1,5 +1,5 @@
 import numpy as np
-from utils.class_relationship_utils import find_parent
+from hierarchical_classifier.hierarchical_utils.class_relationship_utils import find_parent
 from hierarchical_classifier.policies.policy import Policy
 from hierarchical_classifier.constants.utils_constants import CLASS_SEPARATOR
 
