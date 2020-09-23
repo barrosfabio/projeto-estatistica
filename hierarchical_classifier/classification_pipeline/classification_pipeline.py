@@ -1,6 +1,7 @@
 from utils.data_utils import *
 from hierarchical_classifier.tree.lcpn_tree import LCPNTree
 from hierarchical_classifier.evaluation.hierarchical_metrics import calculate_hierarchical_metrics
+from hierarchical_classifier.evaluation.flat_metrics import calculate_flat_metrics
 from hierarchical_classifier.resampling.resampling_algorithm import ResamplingAlgorithm
 from hierarchical_classifier.results.dto.experiment_result_dto import ExperimentResultDTO
 from hierarchical_classifier.results.dto.result_dto import ResultDTO
@@ -50,7 +51,8 @@ class HierarchicalClassificationPipeline:
         per_class_metrics = pipeline_results.calculate_perclass_metrics(outputs_test, predicted_classes)
         conf_matrix = confusion_matrix(outputs_test, predicted_classes)
 
-        [hp, hr, hf] = calculate_hierarchical_metrics(predicted_classes, outputs_test)
+        #[hp, hr, hf] = calculate_hierarchical_metrics(predicted_classes, outputs_test)
+        [hp, hr, hf] = calculate_flat_metrics(predicted_classes, outputs_test)
 
 
         print('\n-------------------Results Summary-------------------')

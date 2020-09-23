@@ -1,7 +1,7 @@
 from hierarchical_classifier.classification_pipeline.classification_pipeline import HierarchicalClassificationPipeline
 from hierarchical_classifier.hierarchical_utils.hierarchical_results_utils import calculate_average_fold_result
 from hierarchical_classifier.results.dto.average_experiment_result_dto import AverageExperimentResultDTO
-from utils.data_utils import slice_data, array_to_data_frame
+from utils.data_utils import slice_data, array_to_data_frame, count_per_class
 from sklearn.model_selection import StratifiedKFold
 
 class ExperimentalProtocol:
@@ -24,6 +24,12 @@ class ExperimentalProtocol:
             # Slice inputs and outputs
             input_data_train, output_data_train = self.input_data[train_index], self.output_data[train_index]
             input_data_test, output_data_test = self.input_data[test_index], self.output_data[test_index]
+
+            print('Training dataset class distribution')
+            count_per_class(output_data_train)
+
+            print('Testing dataset class distribution')
+            count_per_class(output_data_test)
 
             # Transform fold_data into data_frame again
             train_data_frame = array_to_data_frame(input_data_train, output_data_train)

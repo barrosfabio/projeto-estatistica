@@ -1,6 +1,5 @@
 from hierarchical_classifier.constants.utils_constants import CLASS_SEPARATOR
 
-
 def find_ancestors(predicted, actual, current_pos):
     ancestors_predicted = predicted[0:current_pos]
     ancestors_actual = actual[0:current_pos]
