@@ -2,6 +2,7 @@ from hierarchical_classifier.results.results_framework import ResultsFramework
 from hierarchical_classifier.results.dto.local_result_dto import LocalResultDTO
 from hierarchical_classifier.evaluation.hierarchical_metrics import calculate_hierarchical_metrics
 from hierarchical_classifier.configurations.global_config import GlobalConfig
+from hierarchical_classifier.evaluation.flat_metrics import calculate_flat_metrics
 from utils.results_utils import write_csv
 import numpy as np
 import pandas as pd
@@ -46,7 +47,9 @@ class PipeleineResultsFramework(ResultsFramework):
     def calculate_local_metrics(self, filtered_predicted_array, filtered_output_array):
         if len(filtered_output_array) != 0:
             # Calculating the metrics for the current_class
-            [hp, hr, hf] = calculate_hierarchical_metrics(filtered_predicted_array, filtered_output_array)
+           # [hp, hr, hf] = calculate_hierarchical_metrics(filtered_predicted_array, filtered_output_array)
+            # Flat metrics
+            [hp, hr, hf] = calculate_flat_metrics(filtered_predicted_array, filtered_output_array, avg_type='macro')
         else:
             hp = 0.0
             hr = 0.0

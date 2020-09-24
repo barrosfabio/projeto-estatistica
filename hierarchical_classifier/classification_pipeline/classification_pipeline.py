@@ -52,7 +52,7 @@ class HierarchicalClassificationPipeline:
         conf_matrix = confusion_matrix(outputs_test, predicted_classes)
 
         #[hp, hr, hf] = calculate_hierarchical_metrics(predicted_classes, outputs_test)
-        [hp, hr, hf] = calculate_flat_metrics(predicted_classes, outputs_test)
+        [hp, hr, hf] = calculate_flat_metrics(predicted_classes, outputs_test, avg_type='macro')
 
 
         print('\n-------------------Results Summary-------------------')
