@@ -13,7 +13,7 @@ def slice_data(dataset):
     return [input_data, output_data]
 
 
-def count_per_class(output_data):
+def print_count_per_class(output_data):
     original_count = np.unique(output_data, return_counts=True)
     classes = original_count[0]
     count = original_count[1]

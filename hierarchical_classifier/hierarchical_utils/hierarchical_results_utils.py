@@ -95,8 +95,11 @@ def calculate_average_fold_result(fold_result_list, unique_classes):
     final_cm = calculate_all_folds_conf_matrix(conf_matrix_list, len(unique_classes))
 
     # Plotting final_cm for the experiment
-    image_path = global_config.directory_list['confusion_matrix_' + strategy + '_' + algorithm] + '/conf_matrix.png'
-    plot_confusion_matrix(final_cm, classes=unique_classes, image_name=image_path,
+    image_path = global_config.directory_list['confusion_matrix_' + strategy + '_' + algorithm]
+    plot_confusion_matrix(final_cm, classes=unique_classes, image_name=image_path + '/conf_matrix.png',
+                          normalize=False,
+                          title='Confusion Matrix')
+    plot_confusion_matrix(final_cm, classes=unique_classes, image_name=image_path + '/conf_matrix_normalized.png',
                           normalize=True,
                           title='Confusion Matrix')
 
