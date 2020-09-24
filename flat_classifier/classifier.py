@@ -33,7 +33,7 @@ from hierarchical_classifier.results.global_results_framework import GlobalResul
 def main():
     data = './feature_extraction/result/filtered_covid_canada_rydles_plus7.csv'
     classifier_name = 'rf'
-    n_experiment_runs = 11
+    n_experiment_runs = 20
     n_folds = 5
     k_neighbors = 5
     result_path = './flat_classifier/results/detailed'
@@ -56,18 +56,23 @@ def train_and_predict(train_index, test_index, input_data, output_data, resampli
     inputs_train, outputs_train = input_data[train_index], output_data[train_index]
     inputs_test, outputs_test = input_data[test_index], output_data[test_index]
 
+    input_data_train = None
+    output_data_train = None
     if resampling_algorithm_name != resampling_algorithm.NONE:
         print(f"Resampling data with {resampling_algorithm_name}")
         resampler = resampling_algorithm.instantiate_resampler('flat', resampling_algorithm_name, 5)
 
-        [input_data_train, output_data_train] = resampler.fit_resample(inputs_train,
+        input_data_train, output_data_train = resampler.fit_resample(inputs_train,
                                                                     outputs_train)
         print("Done resampling")
+    else:
+        input_data_train = inputs_train
+        output_data_train = outputs_train
 
     print("Started training ", end='')
     
     clf = some_functions.get_classifier(classifier_name)
-    clf = clf.fit(inputs_train, outputs_train)
+    clf = clf.fit(input_data_train, output_data_train)
     print("-> Finished")
 
     print("Start Prediction ", end='')
@@ -90,7 +95,7 @@ def run_cross_validation(output_data, input_data, kfold, classes, resampling_str
         per_class_metrics = pipeline_results.calculate_perclass_metrics(outputs_test, predicted)
         conf_matrix = confusion_matrix(outputs_test, predicted)
 
-        [hp, hr, hf] = calculate_flat_metrics(predicted, outputs_test)
+        [hp, hr, hf] = calculate_flat_metrics(predicted, outputs_test, avg_type='macro')
 
         result = ExperimentResultDTO(ResultDTO(hp, hr, hf), per_class_metrics, conf_matrix, resampling_strategy, resampling_algorithm_name, kfold_count)
 
