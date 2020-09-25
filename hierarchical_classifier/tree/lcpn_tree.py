@@ -25,7 +25,7 @@ def relabel_outputs_lcpn(output_data, data_class):
 
 class LCPNTree(Tree):
 
-    def retrieve_lcpn_data(self, root_node, data_frame):
+    def retrieve_lcpn_data(self, root_node, data_frame, fold):
         print('Currently retrieving data for class: {}'.format(root_node.class_name))
 
         # If the current node doesn't have child, it is a leaf node
@@ -49,7 +49,7 @@ class LCPNTree(Tree):
                     k_neighbors = global_config.k_neighbors
                     resampling_algorithm = ResamplingAlgorithm(self.resampling_strategy, self.resampling_algorithm,
                                                                k_neighbors, root_node.class_name)
-                    positive_classes_data = resampling_algorithm.resample(positive_classes_data, self.fold)
+                    positive_classes_data = resampling_algorithm.resample(positive_classes_data, fold)
 
             # Slice data in inputs and outputs
             [input_data, output_data] = slice_data(positive_classes_data)
@@ -67,7 +67,7 @@ class LCPNTree(Tree):
             # Iterate over the current node child to call recursively for all of them
             for i in range(children):
                 print('Child is {}'.format(root_node.child[i].class_name))
-                self.retrieve_lcpn_data(root_node.child[i], data_frame)
+                self.retrieve_lcpn_data(root_node.child[i], data_frame, fold)
 
     def train_lcpn(self, root_node):
 
