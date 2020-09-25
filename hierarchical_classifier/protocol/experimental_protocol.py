@@ -14,7 +14,8 @@ class ExperimentalProtocol:
 
     def run_cross_validation(self, folds, algorithm, classifier_name, strategy):
 
-        folds_result_list = []
+        folds_hierarchical_result_list = []
+        flat_result_list = []
         kfold = StratifiedKFold(n_splits=folds, shuffle=True)
         kfold_count = 1
 
@@ -41,17 +42,19 @@ class ExperimentalProtocol:
                                                                          strategy, kfold_count)
 
             # Run and retrieve the result
-            result = classification_pipeline.run(train_data_frame, test_data_frame, kfold_count)
+            [hierarchical_result, flat_result] = classification_pipeline.run(train_data_frame, test_data_frame, kfold_count)
             kfold_count += 1
 
             # Pipeline result being appended to the list of results for each fold
-            folds_result_list.append(result)
+            folds_hierarchical_result_list.append(hierarchical_result)
+            flat_result_list.append(flat_result)
 
         # Calculate the average result considering the k-folds
-        [average_experiment_results, per_class_results_data_frame] = calculate_average_fold_result(folds_result_list, self.unique_classes)
+        [average_hierarchical_experiment_results, average_flat_experiment_results, per_class_results_data_frame] = calculate_average_fold_result(folds_hierarchical_result_list, flat_result_list, self.unique_classes)
 
         # Build DTO objects to return the average result
-        average_result = AverageExperimentResultDTO(average_experiment_results, strategy, algorithm)
+        average_hierarchical_result = AverageExperimentResultDTO(average_hierarchical_experiment_results, strategy, algorithm)
+        average_flat_result = AverageExperimentResultDTO(average_flat_experiment_results, strategy, algorithm)
         average_result_per_class = AverageExperimentResultDTO(per_class_results_data_frame, strategy, algorithm)
 
-        return [average_result, average_result_per_class]
+        return [average_hierarchical_result, average_flat_result, average_result_per_class]

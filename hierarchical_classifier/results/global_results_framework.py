@@ -12,18 +12,20 @@ class GlobalResultsFramework(ResultsFramework):
         global_result_path = global_config.directory_list['global']
         super(GlobalResultsFramework, self).__init__(global_result_path)
 
-    def transform_to_csv(self, result_list):
+    def transform_to_csv(self, result_list, file_name):
         path = self.results_path
 
         if not os.path.isdir(path):
             os.mkdir(path)
 
-        file_name = path + '/experiment_results'
+        file_name = path + '/' + file_name
 
         result_data_frame = pd.DataFrame(columns=self.global_results_header)
 
         for result in result_list:
-            row = {'resampling_strategy':result.resampling_strategy,'resampling_algorithm': result.resampling_algorithm,'hp':result.avg_result.hp,'hr':result.avg_result.hr,'hf':result.avg_result.hf}
+            row = {'resampling_strategy': result.resampling_strategy,
+                       'resampling_algorithm': result.resampling_algorithm, 'hp': result.avg_result.hp,
+                       'hr': result.avg_result.hr, 'hf': result.avg_result.hf}
 
             result_data_frame = result_data_frame.append(row, ignore_index=True)
 

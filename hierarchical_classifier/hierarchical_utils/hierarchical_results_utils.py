@@ -79,18 +79,20 @@ def calculate_all_folds_conf_matrix(conf_matrix_list, size):
 
     return final_conf_matrix
 
-def calculate_average_fold_result(fold_result_list, unique_classes):
+def calculate_average_fold_result(fold_hierarchical_result_list, fold_flat_result_list, unique_classes):
     global_config = GlobalConfig.instance()
-    strategy = fold_result_list[0].resampling_strategy
-    algorithm = fold_result_list[0].resampling_algorithm
+    strategy = fold_hierarchical_result_list[0].resampling_strategy
+    algorithm = fold_hierarchical_result_list[0].resampling_algorithm
 
     # Retrieve list of results
-    result_metrics_list = parse_result_metrics_list(fold_result_list)
-    result_metrics_per_class = parse_result_metrics_per_class_list(fold_result_list)
-    conf_matrix_list = parse_confusion_matrix_list(fold_result_list)
+    hierarchical_result_metrics_list = parse_result_metrics_list(fold_hierarchical_result_list)
+    flat_result_metrics_list = parse_result_metrics_list(fold_flat_result_list)
+    result_metrics_per_class = parse_result_metrics_per_class_list(fold_hierarchical_result_list)
+    conf_matrix_list = parse_confusion_matrix_list(fold_hierarchical_result_list)
 
     # Calculating the metrics
-    [avg_hp, avg_hr, avg_hf] = calculate_average_metrics(result_metrics_list)
+    [avg_hp, avg_hr, avg_hf] = calculate_average_metrics(hierarchical_result_metrics_list)
+    [avg_precision, avg_recall, avg_fscore] = calculate_average_metrics(flat_result_metrics_list)
     per_class_results_data_frame = calculate_average_metrics_per_class(result_metrics_per_class, unique_classes)
     final_cm = calculate_all_folds_conf_matrix(conf_matrix_list, len(unique_classes))
 
@@ -103,5 +105,6 @@ def calculate_average_fold_result(fold_result_list, unique_classes):
                           normalize=True,
                           title='Confusion Matrix')
 
-    average_experiment_results = ResultDTO(avg_hp, avg_hr, avg_hf)
-    return [average_experiment_results, per_class_results_data_frame]
+    average_hierarchical_experiment_results = ResultDTO(avg_hp, avg_hr, avg_hf)
+    average_flat_experiment_results = ResultDTO(avg_precision, avg_recall, avg_fscore)
+    return [average_hierarchical_experiment_results, average_flat_experiment_results, per_class_results_data_frame]

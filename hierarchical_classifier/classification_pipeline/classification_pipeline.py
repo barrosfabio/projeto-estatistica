@@ -51,16 +51,21 @@ class HierarchicalClassificationPipeline:
         per_class_metrics = pipeline_results.calculate_perclass_metrics(outputs_test, predicted_classes)
         conf_matrix = confusion_matrix(outputs_test, predicted_classes)
 
-        #[hp, hr, hf] = calculate_hierarchical_metrics(predicted_classes, outputs_test)
-        [hp, hr, hf] = calculate_flat_metrics(predicted_classes, outputs_test, avg_type='macro')
+        [hp, hr, hf] = calculate_hierarchical_metrics(predicted_classes, outputs_test)
+        [precision, recall, fscore] = calculate_flat_metrics(predicted_classes, outputs_test, avg_type='macro')
 
 
         print('\n-------------------Results Summary-------------------')
         print('Hierarchical Precision: {}'.format(hp))
         print('Hierarchical Recall: {}'.format(hr))
         print('Hierarchical F-Measure: {}'.format(hf))
+        print('Precision: {}'.format(precision))
+        print('Recall: {}'.format(recall))
+        print('F-Measure: {}'.format(fscore))
+        print('Classification completed')
         print('Classification completed')
 
-        return ExperimentResultDTO(ResultDTO(hp, hr, hf), per_class_metrics, conf_matrix, self.resampling_strategy, self.resampling_algorithm, fold)
+        return [ExperimentResultDTO(ResultDTO(hp, hr, hf), per_class_metrics, conf_matrix, self.resampling_strategy, self.resampling_algorithm, fold),
+                ExperimentResultDTO(ResultDTO(hp, hr, hf), per_class_metrics, conf_matrix, self.resampling_strategy, self.resampling_algorithm, fold)]
 
 
