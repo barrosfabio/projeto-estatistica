@@ -1,4 +1,5 @@
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.neural_network import MLPClassifier
 
 
 class ClassificationAlgorithm:
@@ -7,6 +8,9 @@ class ClassificationAlgorithm:
         if option == 'rf':
             self.classifier_name = option
             self.classifier = RandomForestClassifier(n_estimators=150, criterion='gini')
+        elif option == 'mlp':
+            self.classifier_name = option
+            self.classifier = MLPClassifier(activation='relu',hidden_layer_sizes=(100,100), max_iter=1000)
 
     def train(self, dataset):
         # Training the classifier
