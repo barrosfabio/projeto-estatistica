@@ -6,12 +6,11 @@ from hierarchical_classifier.configurations.global_config import GlobalConfig
 from utils.data_utils import slice_data
 from utils.data_utils import load_csv_data
 
-#path = 'C:/Users/Fabio Barros/Git/projeto-estatistica/feature_extraction/result/filtered_covid_canada_rydles_plus7_novos_rotulos.csv'
-path = 'C:/Users/Fabio Barros/Git/projeto-estatistica/feature_extraction/result/filtered_covid_canada_rydles_plus7.csv'
-#path = 'C:/Users/Fabio Barros/Git/projeto-estatistica/feature_extraction/result/filtered_covid_canada_plus7.csv'
+path = './feature_extraction/result/filtered_covid_canada_rydles_plus7_novos_rotulos.csv'
+#path = 'C:/Users/Fabio Barros/Git/projeto-estatistica/feature_extraction/result/filtered_covid_canada_rydles_plus7.csv'
 #path = 'C:/Users/Fabio Barros/Git/projeto-estatistica/feature_extraction/result/covid_feature_matrix_train.csv'
-result_path = 'C:/Users/Fabio Barros/Git/projeto-estatistica/hierarchical_classifier/final_results/experiment_results'
-classifier_name = 'mlp'
+result_path = './hierarchical_classifier/final_results/experiment_results'
+classifier_name = 'rf'
 folds = 5
 k_neighbors = 5
 

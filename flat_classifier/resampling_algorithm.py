@@ -5,7 +5,7 @@ from imblearn.under_sampling import RandomUnderSampler, NeighbourhoodCleaningRul
     NearMiss, AllKNN
 
 resampling_algorithms = [NONE, RANDOM_OVERSAMPLER, SMOTE_RESAMPLE, BORDERLINE_SMOTE, ADASYN_RESAMPLER, SMOTE_ENN, SMOTE_TOMEK]
-resampling_strategies = [NONE, FLAT_RESAMPLING, HIERARCHICAL_RESAMPLING]
+resampling_strategies = [NONE, FLAT_RESAMPLING]
 
 # Resampling strategies
 NONE = 'none'
