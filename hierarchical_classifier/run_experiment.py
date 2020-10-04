@@ -14,7 +14,7 @@ result_path = 'C:/Users/Fabio Barros/Git/projeto-estatistica/hierarchical_classi
 classifier_name = 'dt'
 folds = 5
 k_neighbors = 5
-num_experiments = 1
+num_experiments = 20
 
 # Saving Global Configurations in singleton object
 global_config = GlobalConfig.instance()
@@ -24,7 +24,7 @@ global_config.set_kfold(folds)
 resampling_algorithms = [RANDOM_OVERSAMPLER, SMOTE_RESAMPLE, BORDERLINE_SMOTE, ADASYN_RESAMPLER, SMOTE_ENN, SMOTE_TOMEK]
 resampling_strategies = [NONE, FLAT_RESAMPLING]
 
-for i in range(0,num_experiments):
+for i in range(0,num_experiments+1):
     results_list = []
     results_per_class_list = []
 
