@@ -22,7 +22,7 @@ global_config.set_kfold(folds)
 resampling_algorithms = [RANDOM_OVERSAMPLER, SMOTE_RESAMPLE, BORDERLINE_SMOTE, ADASYN_RESAMPLER, SMOTE_ENN, SMOTE_TOMEK]
 resampling_strategies = [NONE, FLAT_RESAMPLING]
 
-for i in range(0,9):
+for i in range(0,20):
     results_list = []
     results_per_class_list = []
 

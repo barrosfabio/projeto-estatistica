@@ -37,7 +37,7 @@ class HierarchicalClassificationPipeline:
             resampling_algorithm = ResamplingAlgorithm(self.resampling_strategy, self.resampling_algorithm, self.k_neighbors)
             train_data_frame = resampling_algorithm.resample(train_data_frame, fold)
 
-        tree.retrieve_lcpn_data(class_tree, train_data_frame)
+        tree.retrieve_lcpn_data(class_tree, train_data_frame, fold)
 
         # 3. Train the classifiers
         tree.train_lcpn(class_tree)
