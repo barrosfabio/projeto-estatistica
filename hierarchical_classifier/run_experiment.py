@@ -10,9 +10,10 @@ path = './feature_extraction/result/filtered_covid_canada_rydles_plus7_novos_rot
 #path = 'C:/Users/Fabio Barros/Git/projeto-estatistica/feature_extraction/result/filtered_covid_canada_rydles_plus7.csv'
 #path = 'C:/Users/Fabio Barros/Git/projeto-estatistica/feature_extraction/result/covid_feature_matrix_train.csv'
 result_path = './hierarchical_classifier/final_results/experiment_results'
-classifier_name = 'rf'
+classifier_name = 'dt'
 folds = 5
 k_neighbors = 5
+num_experiments = 20
 
 # Saving Global Configurations in singleton object
 global_config = GlobalConfig.instance()
@@ -22,7 +23,7 @@ global_config.set_kfold(folds)
 resampling_algorithms = [RANDOM_OVERSAMPLER, SMOTE_RESAMPLE, BORDERLINE_SMOTE, ADASYN_RESAMPLER, SMOTE_ENN, SMOTE_TOMEK]
 resampling_strategies = [NONE, FLAT_RESAMPLING]
 
-for i in range(0,20):
+for i in range(0,num_experiments+1):
     results_list = []
     results_per_class_list = []
 

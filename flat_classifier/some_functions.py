@@ -1,6 +1,9 @@
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.neural_network import MLPClassifier
 from sklearn.svm import SVC
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.naive_bayes import GaussianNB
+from sklearn.neighbors import KNeighborsClassifier
 import numpy as np
 
 
@@ -29,7 +32,12 @@ def get_classifier(classifier):
     if classifier == 'rf':
         return RandomForestClassifier(n_estimators=150, criterion='gini')
     elif classifier == 'mlp':
-        return MLPClassifier(hidden_layer_sizes=120, activation='logistic', verbose=False, early_stopping=True,
-                             validation_fraction=0.2)
+        return MLPClassifier(solver='lbfgs', activation='relu', max_iter=500)
     elif classifier == 'svm':
         return SVC(gamma='auto', probability=True)
+    elif classifier == 'dt':
+        return DecisionTreeClassifier(criterion='gini')
+    elif classifier == 'nb':
+        return GaussianNB()
+    elif classifier == 'knn':
+        return KNeighborsClassifier(n_neighbors=5)

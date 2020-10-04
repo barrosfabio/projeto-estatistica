@@ -82,16 +82,21 @@ class LCPNTree(Tree):
             # Train the classifier
             classifier = ClassificationAlgorithm(self.classification_algorithm)
             print('Started Training for parent node {}'.format(root_node.class_name))
-            classifier.train(training_data)
-            print('Finished Training')
-
-            # Save the classifier in the tree
-            print('Saving the classifer...')
-            root_node.set_classifier(classifier)
 
             # Retrieve the number of children for the current node
             children = len(root_node.child)
             print('Current Node {} has {} child/children'.format(root_node.class_name, children))
+
+            # Testing if there are at least two child classes, Otherwise we don't need to train the classifier
+            if(children > 1):
+                classifier.train(training_data)
+                print('Finished Training')
+
+                # Save the classifier in the tree
+                print('Saving the classifer...')
+                root_node.set_classifier(classifier)
+            else:
+                print('Current Node doesnt have multiple child, we dont need to train the classifier.')
 
             # Iterate over the current node child to call recursively for all of them
             for i in range(children):
@@ -108,11 +113,22 @@ class LCPNTree(Tree):
             # Retrieve the classifier
             classifier = root_node.classifier
             print('Started Prediction...'.format(root_node.class_name))
-            predicted_class = classifier.prediction(sample)
 
             # Retrieve the number of children for the current node
             children = len(root_node.child)
             print('Current Node {} has {} child/children'.format(root_node.class_name, children))
+
+            # Testing if there are at least two child classes, Otherwise we don't need to train the classifier
+            if (children > 1):
+                predicted_class = classifier.prediction(sample)
+                print('Finished Training')
+
+                # Save the classifier in the tree
+                print('Saving the classifer...')
+                root_node.set_classifier(classifier)
+            else:
+                predicted_class = root_node.child[0].class_name
+                print('Current Node doesnt have multiple child, we predict the class as its only child {}.'.format(predicted_class))
 
             # Iterate over the current node child to check which child was the prediction
             for i in range(children):
