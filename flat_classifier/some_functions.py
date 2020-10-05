@@ -37,7 +37,7 @@ def get_classifier(classifier):
         return SVC(gamma='auto', probability=True)
     elif classifier == 'dt':
         return DecisionTreeClassifier(criterion='gini')
-    elif classifier == 'nb':
+    elif classifier == 'NB':
         return GaussianNB()
     elif classifier == 'knn':
         return KNeighborsClassifier(n_neighbors=5)

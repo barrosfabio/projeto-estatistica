@@ -18,7 +18,7 @@ class ClassificationAlgorithm:
             self.classifier = SVC(gamma='auto', probability=True)
         elif option == 'dt':
             self.classifier = DecisionTreeClassifier(criterion = 'gini')
-        elif option == 'nb':
+        elif option == 'NB':
             self.classifier = GaussianNB()
         elif option == 'knn':
             self.classifier = KNeighborsClassifier(n_neighbors=5)
