@@ -32,11 +32,11 @@ from hierarchical_classifier.results.global_results_framework import GlobalResul
 
 def main():
     data = '../feature_extraction/result/filtered_covid_canada_rydles_plus7.csv'
-    classifier_name = 'svm'
+    classifier_name = 'mlp'
     n_experiment_runs = 20
     n_folds = 5
     k_neighbors = 5
-    result_path = './results/detailed'
+    result_path = 'results/detailed'
 
     global_config = GlobalConfig.instance()
     global_config.set_kneighbors(k_neighbors)
