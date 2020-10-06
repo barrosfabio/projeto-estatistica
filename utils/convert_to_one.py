@@ -1,7 +1,7 @@
 import pandas as pd
 import os
 
-nome = 'NB'
+nome = 'SVM'
 file_directory = '../flat_classifier/' + nome
 columns = ['none', 'ros', 'smote', 'borderline', 'adasyn', 'smote-enn', 'smote-tomek']
 final_df = pd.DataFrame()
