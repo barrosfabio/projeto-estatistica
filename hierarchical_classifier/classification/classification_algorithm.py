@@ -14,8 +14,9 @@ class ClassificationAlgorithm:
             self.classifier = RandomForestClassifier(n_estimators=150, criterion='gini')
         elif option == 'mlp':
             self.classifier = MLPClassifier(solver='lbfgs', activation='relu', max_iter=500)
+            #self.classifier = MLPClassifier(activation='relu', hidden_layer_sizes=(100,100), max_iter=1000)
         elif option == 'svm':
-            self.classifier = SVC(gamma='auto', probability=True)
+            self.classifier = SVC()
         elif option == 'dt':
             self.classifier = DecisionTreeClassifier(criterion = 'gini')
         elif option == 'NB':

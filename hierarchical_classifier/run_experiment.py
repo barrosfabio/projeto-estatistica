@@ -6,14 +6,15 @@ from hierarchical_classifier.configurations.global_config import GlobalConfig
 from utils.data_utils import slice_data
 from utils.data_utils import load_csv_data
 
-path = './feature_extraction/result/filtered_covid_canada_rydles_plus7_novos_rotulos.csv'
-#path = 'C:/Users/Fabio Barros/Git/projeto-estatistica/feature_extraction/result/filtered_covid_canada_rydles_plus7.csv'
+#path = 'C:/Users/Fabio Barros/Git/projeto-estatistica/feature_extraction/result/filtered_covid_canada_rydles_plus7_novos_rotulos.csv'
+path = 'C:/Users/Fabio Barros/Git/projeto-estatistica/feature_extraction/result/filtered_covid_canada_rydles_plus7.csv'
+#path = 'C:/Users/Fabio Barros/Git/projeto-estatistica/feature_extraction/result/filtered_covid_canada_plus7.csv'
 #path = 'C:/Users/Fabio Barros/Git/projeto-estatistica/feature_extraction/result/covid_feature_matrix_train.csv'
-result_path = './hierarchical_classifier/final_results/experiment_results'
-classifier_name = 'dt'
+result_path = 'C:/Users/Fabio Barros/Git/projeto-estatistica/hierarchical_classifier/final_results/experiment_results'
+classifier_name = 'nb'
 folds = 5
 k_neighbors = 5
-num_experiments = 20
+num_experiments = 2
 
 # Saving Global Configurations in singleton object
 global_config = GlobalConfig.instance()
@@ -23,7 +24,7 @@ global_config.set_kfold(folds)
 resampling_algorithms = [RANDOM_OVERSAMPLER, SMOTE_RESAMPLE, BORDERLINE_SMOTE, ADASYN_RESAMPLER, SMOTE_ENN, SMOTE_TOMEK]
 resampling_strategies = [NONE, FLAT_RESAMPLING]
 
-for i in range(0,num_experiments+1):
+for i in range(0,num_experiments):
     results_list = []
     results_per_class_list = []
 
