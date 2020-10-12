@@ -1,4 +1,6 @@
 import csv
+import matplotlib
+matplotlib.use('Agg')
 from matplotlib import pyplot as plt
 import numpy as np
 import itertools
@@ -33,9 +35,11 @@ def plot_confusion_matrix(cm, classes, image_name,
                           normalize=True,
                           title='Confusion matrix',
                           cmap=plt.cm.Blues,
-                          figsize=(20,20)):
-
+                          figsize=(28,28)):
+    
+    plt.rcParams.update({'font.size': 32})
     plt.figure(figsize=figsize)
+    
     if normalize:
         cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
     else:
@@ -58,7 +62,7 @@ def plot_confusion_matrix(cm, classes, image_name,
 
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
-    plt.savefig(image_name)
+    plt.savefig(image_name, bbox_inches = "tight")
     #plt.show(block=False)
     plt.close()
 

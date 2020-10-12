@@ -1,6 +1,9 @@
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.neural_network import MLPClassifier
 from sklearn.svm import SVC
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.naive_bayes import GaussianNB
+from sklearn.neighbors import KNeighborsClassifier
 import numpy as np
 
 
@@ -13,7 +16,7 @@ def slice_data(dataset):
     return [input_data, output_data]
 
 
-def count_per_class(output_data):
+def print_count_per_class(output_data):
     original_count = np.unique(output_data, return_counts=True)
     classes = original_count[0]
     count = original_count[1]
@@ -27,9 +30,14 @@ def count_per_class(output_data):
 def get_classifier(classifier):
     # Define the classifier
     if classifier == 'rf':
-        return RandomForestClassifier(n_estimators=150, criterion='gini', n_jobs=4)
+        return RandomForestClassifier(n_estimators=150, criterion='gini')
     elif classifier == 'mlp':
-        return MLPClassifier(hidden_layer_sizes=120, activation='logistic', verbose=False, early_stopping=True,
-                             validation_fraction=0.2)
+        return MLPClassifier(solver='lbfgs', activation='relu', max_iter=500)
     elif classifier == 'svm':
         return SVC(gamma='auto', probability=True)
+    elif classifier == 'dt':
+        return DecisionTreeClassifier(criterion='gini')
+    elif classifier == 'NB':
+        return GaussianNB()
+    elif classifier == 'knn':
+        return KNeighborsClassifier(n_neighbors=5)

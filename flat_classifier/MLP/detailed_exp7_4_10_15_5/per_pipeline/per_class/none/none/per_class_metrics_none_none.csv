@@ -1,0 +1,10 @@
+class_name;hf;hp;hr
+R/Bacterial/Klebsiella;0.0;0.0;0.0
+R/Bacterial/Legionella;0.0;0.0;0.0
+R/Bacterial/Mycoplasma;0.0;0.0;0.0
+R/Bacterial/Streptococcus;0.0;0.0;0.0
+R/Fungal/Pneumocystis;0.02857142857142857;0.1;0.016666666666666666
+R/Lipoid/Non applicable;0.08;0.1;0.06666666666666667
+R/Normal;0.4964671071091498;0.5;0.493
+R/Viral/COVID-19;0.3191258982069619;0.3333333333333333;0.3061622807017544
+R/Viral/SARS;0.0;0.0;0.0

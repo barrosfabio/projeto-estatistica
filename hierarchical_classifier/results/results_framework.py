@@ -1,5 +1,7 @@
 import numpy as np
 import itertools
+import matplotlib
+matplotlib.use('Agg')
 from matplotlib import pyplot as plt
 import csv
 import os

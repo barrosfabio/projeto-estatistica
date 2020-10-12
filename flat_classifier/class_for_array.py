@@ -112,8 +112,7 @@ class AllResamples:
     def create_new_resample(self, resample_name):
         self.resample.append(Resample(resample_name))
 
-    def save_to_csv(self):
-        filename = './results/flat_classifier_' + str(datetime.now().strftime('%H-%M-%S')) + '.csv'
+    def save_to_csv(self, filename):
         print('\nStarted saving detailed data process.')
 
         with open(filename, mode='w') as csv_file:
@@ -147,8 +146,7 @@ class AllResamples:
         print('Simple data save complete!')
         print('Created file -> ', filename)
 
-    def save_detailed_to_csv(self):
-        filename = './results/flat_detailed_classifier_' + str(datetime.now().strftime('%H-%M-%S')) + '.csv'
+    def save_detailed_to_csv(self, filename):
         print('\nStarted saving detailed data process.')
 
         with open(filename, mode='w') as csv_file:

@@ -1,12 +1,28 @@
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.neural_network import MLPClassifier
+from sklearn.svm import SVC
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.naive_bayes import GaussianNB
+from sklearn.neighbors import KNeighborsClassifier
 
 
 class ClassificationAlgorithm:
 
     def __init__(self, option):
+        self.classifier_name = option
         if option == 'rf':
-            self.classifier_name = option
             self.classifier = RandomForestClassifier(n_estimators=150, criterion='gini')
+        elif option == 'mlp':
+            self.classifier = MLPClassifier(solver='lbfgs', activation='relu', max_iter=500)
+            #self.classifier = MLPClassifier(activation='relu', hidden_layer_sizes=(100,100), max_iter=1000)
+        elif option == 'svm':
+            self.classifier = SVC()
+        elif option == 'dt':
+            self.classifier = DecisionTreeClassifier(criterion = 'gini')
+        elif option == 'NB':
+            self.classifier = GaussianNB()
+        elif option == 'knn':
+            self.classifier = KNeighborsClassifier(n_neighbors=5)
 
     def train(self, dataset):
         # Training the classifier
